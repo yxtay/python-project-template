@@ -1,4 +1,9 @@
+import multiprocessing
 import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # debugging
 reload = True  # default: False
@@ -7,12 +12,24 @@ reload = True  # default: False
 loglevel = "info"  # default: "info"
 
 # server socket
-port = os.getenv("PORT", 8080)
-bind = [":{port}".format(port=port)]  # default: ['127.0.0.1:8000']
+host = os.environ.get("HOST", "127.0.0.1")
+port = os.environ.get("PORT", "8000")
+bind = [f"{host}:{port}"]  # default: ["127.0.0.1:8000"]
 backlog = 2048  # default: 2048
 
+# workers, default: 1
+web_concurrency = os.environ.get("WEB_CONCURRENCY")
+if web_concurrency:
+    workers = int(web_concurrency)
+    assert workers > 0
+else:
+    cores = multiprocessing.cpu_count()
+    workers_per_core = 2
+    min_workers = 2
+    max_workers = 4
+    workers = max(min_workers, min(cores * workers_per_core, max_workers))
+
 # worker processes
-workers = 4  # default: 1
 worker_class = "uvicorn.workers.UvicornWorker"  # default: "sync"
 threads = 4  # default: 1, only for gthread worker_class
 worker_connections = 1000  # default: 1000, only eventlet and gevent worker_class
