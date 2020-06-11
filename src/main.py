@@ -1,12 +1,10 @@
 import typer
 
-from src.config import config
-
 app = typer.Typer()
 
 
 @app.command()
-def main(name: str = typer.Argument(config.name)):
+def main(name: str = typer.Argument("World")):
     """
     Print hello message
 
