@@ -3,7 +3,7 @@ from itertools import product
 import pytest
 from starlette.testclient import TestClient
 
-from src.app import app
+from src.web import app
 
 client = TestClient(app)
 
