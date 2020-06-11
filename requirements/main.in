@@ -1,0 +1,5 @@
+fastapi~=0.55.1
+gunicorn~=20.0.4
+pydantic[dotenv]~=1.5.1
+typer~=0.2.1
+uvicorn~=0.11.5

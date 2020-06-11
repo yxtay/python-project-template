@@ -1,0 +1,9 @@
+-c main.txt
+black
+flake8
+jupyterlab
+mypy
+pre-commit
+pytest
+pytest-cov
+tabulate
