@@ -11,6 +11,7 @@ h11==0.9.0                # via uvicorn
 httptools==0.1.1          # via uvicorn
 pydantic[dotenv]==1.5.1   # via -r requirements/main.in, fastapi
 python-dotenv==0.13.0     # via pydantic
+python-json-logger==0.1.11  # via -r requirements/main.in
 starlette==0.13.2         # via fastapi
 typer==0.2.1              # via -r requirements/main.in
 uvicorn==0.11.5           # via -r requirements/main.in

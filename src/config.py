@@ -3,21 +3,33 @@ import os
 import typer
 from pydantic import BaseSettings
 
+from src.logger import configure_log_handlers, get_logger
+
 
 class DevelopmentConfig(BaseSettings):
+    app_name: str = "python-app-starter"
     environment: str = "dev"
-    name: str
+
+    # logging
+    log_file: str = "main.log"
+    log_console: bool = True
+
+    message: str = "default message"
 
     class Config:
         env_file = ".env"
 
 
 class StagingConfig(DevelopmentConfig):
-    environment: str = "stg"
+    environment = "stg"
+
+    log_file = ""
 
 
 class ProductionConfig(DevelopmentConfig):
-    environment: str = "prod"
+    environment = "prod"
+
+    log_file = ""
 
 
 def get_config(environment: str = os.environ.get("ENVIRONMENT", "dev")):
@@ -30,6 +42,12 @@ def get_config(environment: str = os.environ.get("ENVIRONMENT", "dev")):
 
 
 config = get_config()
+
+# config logger
+configure_log_handlers(config.log_console, config.log_file)
+logger = get_logger(config.app_name)
+logger.debug("config", extra={"config": config.dict()})
+
 app = typer.Typer()
 
 
