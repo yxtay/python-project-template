@@ -38,7 +38,7 @@ def main(key: str):
     Print config value of specified key.
     """
     environment = os.environ.get("ENVIRONMENT", "dev")
-    typer.echo(get_config(environment).dict().get(key))
+    typer.echo(config.dict().get(key))
 
 
 if __name__ == "__main__":
