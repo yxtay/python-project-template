@@ -5,20 +5,21 @@ from src.main import app
 
 runner = CliRunner()
 
-
-def test_base():
-    result = runner.invoke(app)
-    assert result.exit_code == 0
-    assert "Hello World!" == result.stdout.strip()
-
-
 cases = ["World", "Name", "name", "NAME"]
 
 
+def test_base():
+    expected = "Hello World!"
+
+    result = runner.invoke(app)
+    assert result.exit_code == 0
+    assert result.stdout.strip() == expected
+
+
 @pytest.mark.parametrize("name", cases)
-def test_arg(name):
+def test_arg(name: str):
     expected = f"Hello {name}!"
 
     result = runner.invoke(app, [name])
     assert result.exit_code == 0
-    assert expected == result.stdout.strip()
+    assert result.stdout.strip() == expected

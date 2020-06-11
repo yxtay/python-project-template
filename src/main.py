@@ -10,7 +10,7 @@ def main(name: str = typer.Argument(config.name)):
     """
     Print hello message
 
-    name - specified as an argument or via NAME environment variable
+    name - name to be greeted; default: "World"
     """
     message = f"Hello {name}!"
     typer.echo(message)

@@ -22,13 +22,14 @@ class ProductionConfig(DevelopmentConfig):
 
 def get_config(environment: str = os.environ.get("ENVIRONMENT", "dev")):
     configs = {
-        "dev": DevelopmentConfig(), "stg": StagingConfig(), "prod": ProductionConfig(),
+        "dev": DevelopmentConfig(),
+        "stg": StagingConfig(),
+        "prod": ProductionConfig(),
     }
     return configs[environment]
 
 
 config = get_config()
-
 app = typer.Typer()
 
 
@@ -37,7 +38,6 @@ def main(key: str):
     """
     Print config value of specified key.
     """
-    environment = os.environ.get("ENVIRONMENT", "dev")
     typer.echo(config.dict().get(key))
 
 
