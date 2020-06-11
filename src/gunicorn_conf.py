@@ -10,18 +10,17 @@ reload = True  # default: False
 
 # logging
 loglevel = "info"  # default: "info"
+worker_tmp_dir = "/dev/shm"
 
 # server socket
 host = os.environ.get("HOST", "127.0.0.1")
 port = os.environ.get("PORT", "8000")
 bind = [f"{host}:{port}"]  # default: ["127.0.0.1:8000"]
-backlog = 2048  # default: 2048
 
 # workers, default: 1
 web_concurrency = os.environ.get("WEB_CONCURRENCY")
 if web_concurrency:
     workers = int(web_concurrency)
-    assert workers > 0
 else:
     cores = multiprocessing.cpu_count()
     workers_per_core = 2
