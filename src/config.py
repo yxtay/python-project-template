@@ -11,8 +11,8 @@ class DevelopmentConfig(BaseSettings):
     environment: str = "dev"
 
     # logging
-    log_file: str = "main.log"
     log_console: bool = True
+    log_file: str = "main.log"
 
     message: str = "default message"
 
@@ -22,17 +22,15 @@ class DevelopmentConfig(BaseSettings):
 
 class StagingConfig(DevelopmentConfig):
     environment = "stg"
-
     log_file = ""
 
 
 class ProductionConfig(DevelopmentConfig):
     environment = "prod"
-
     log_file = ""
 
 
-def get_config(environment: str = os.environ.get("ENVIRONMENT", "dev")):
+def get_config(environment: str = os.environ.get("ENVIRONMENT", "dev")) -> DevelopmentConfig:
     configs = {
         "dev": DevelopmentConfig(),
         "stg": StagingConfig(),
@@ -48,11 +46,8 @@ configure_log_handlers(config.log_console, config.log_file)
 logger = get_logger(config.app_name)
 logger.debug("config", extra={"config": config.dict()})
 
-app = typer.Typer()
 
-
-@app.command()
-def main(key: str):
+def main(key: str) -> None:
     """
     Print config value of specified key.
     """
@@ -60,4 +55,4 @@ def main(key: str):
 
 
 if __name__ == "__main__":
-    app()
+    typer.run(main)

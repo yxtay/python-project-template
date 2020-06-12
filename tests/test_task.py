@@ -1,4 +1,4 @@
-import pytest
+import pytest  # type: ignore
 from typer.testing import CliRunner
 
 from src.task import app

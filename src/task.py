@@ -4,7 +4,7 @@ app = typer.Typer()
 
 
 @app.command()
-def main(name: str = typer.Argument("World")):
+def main(name: str = typer.Argument("World")) -> None:
     """
     Print hello message
 

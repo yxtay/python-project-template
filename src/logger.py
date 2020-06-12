@@ -2,15 +2,16 @@ import logging
 import queue
 import sys
 from logging.handlers import QueueHandler, QueueListener, RotatingFileHandler
-from typing import Any, Dict
+from typing import Any, Dict, List
 
-from pythonjsonlogger import jsonlogger
+from pythonjsonlogger import jsonlogger  # type: ignore
 
 # init root logger with null handler
 logging.basicConfig(handlers=[logging.NullHandler()])
 
 # init log queue for handler and listener
-log_queue = queue.Queue()
+log_queue: queue.Queue[Dict[str, Any]] = queue.Queue()
+log_qlistener: QueueListener = QueueListener(log_queue)
 
 
 class StackdriverFormatter(jsonlogger.JsonFormatter):
@@ -71,7 +72,7 @@ def configure_log_handlers(console: bool = True, log_path: str = "main.log") -> 
     except (AttributeError, NameError):
         pass
 
-    handlers = []
+    handlers: List[logging.Handler] = []
 
     # rotating file handler
     if log_path:

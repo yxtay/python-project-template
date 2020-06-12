@@ -1,6 +1,6 @@
 from itertools import product
 
-import pytest
+import pytest  # type: ignore
 from starlette.testclient import TestClient
 
 from src.web import app

@@ -1,4 +1,5 @@
-import uvicorn
+from typing import Dict
+
 from fastapi import FastAPI
 from pydantic.main import BaseModel
 
@@ -12,7 +13,7 @@ class HelloResponse(BaseModel):
 
 
 @app.get("/", response_model=HelloResponse, summary="Greetings")
-async def hello(greeting: str = "Hello", name: str = "World"):
+async def hello(greeting: str = "Hello", name: str = "World") -> Dict[str, str]:
     """
     Returns greeting message.
     """
@@ -23,4 +24,6 @@ async def hello(greeting: str = "Hello", name: str = "World"):
 
 
 if __name__ == "__main__":
+    import uvicorn  # type: ignore
+
     uvicorn.run("src.web:app", reload=True)
