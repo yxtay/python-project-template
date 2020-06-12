@@ -10,7 +10,7 @@ from pythonjsonlogger import jsonlogger  # type: ignore
 logging.basicConfig(handlers=[logging.NullHandler()])
 
 # init log queue for handler and listener
-log_queue: queue.Queue[Dict[str, Any]] = queue.Queue()
+log_queue: queue.Queue = queue.Queue()
 log_qlistener: QueueListener = QueueListener(log_queue)
 
 

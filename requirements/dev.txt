@@ -26,6 +26,7 @@ importlib-metadata==1.6.1  # via flake8, jsonschema, pluggy, pre-commit, pytest,
 ipykernel==5.3.0          # via notebook
 ipython-genutils==0.2.0   # via nbformat, notebook, traitlets
 ipython==7.15.0           # via ipykernel
+isort==4.3.21             # via -r requirements/dev.in
 jedi==0.17.0              # via ipython
 jinja2==2.11.2            # via jupyterlab, jupyterlab-server, nbconvert, notebook
 json5==0.9.5              # via jupyterlab-server
