@@ -13,7 +13,7 @@ loglevel = "info"  # default: "info"
 worker_tmp_dir = "/dev/shm"
 
 # server socket
-host = os.environ.get("HOST", "127.0.0.1")
+host = os.environ.get("HOST", "0.0.0.0")
 port = os.environ.get("PORT", "8000")
 bind = [f"{host}:{port}"]  # default: ["127.0.0.1:8000"]
 
