@@ -40,7 +40,7 @@ COPY src src
 
 ARG ENVIRONMENT=prod
 ENV ENVIRONMENT $ENVIRONMENT
-CMD ["make", "serve"]
+CMD ["make", "run-web"]
 
 ##
 # app
@@ -53,4 +53,4 @@ COPY --from=builder --chown=appuser:appuser $HOME $HOME
 ARG ENVIRONMENT=prod
 ENV ENVIRONMENT=$ENVIRONMENT
 EXPOSE 8000
-CMD ["make", "serve"]
+CMD ["make", "run-web"]

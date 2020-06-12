@@ -1,7 +1,7 @@
 from itertools import product
 
 import pytest  # type: ignore
-from starlette.testclient import TestClient
+from fastapi.testclient import TestClient
 
 from src.web import app
 

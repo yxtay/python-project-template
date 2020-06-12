@@ -18,23 +18,9 @@ IMAGE_REPO := yxtay
 IMAGE_NAME := $(IMAGE_HOST)/$(IMAGE_REPO)/$(APP_NAME)
 IMAGE_TAG ?= latest
 
-## main
-
 .PHONY: help
 help:  ## print help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-
-.PHONY: ci
-ci: requirements-install lint test  ## run ci steps
-
-.PHONY: run
-run: python-task  ## run main task
-
-.PHONY: serve
-serve: gunicorn  ## serve web application
-
-.PHONY: image-run
-image-run: docker-run  ## run app image
 
 ## dependencies
 
@@ -52,32 +38,35 @@ requirements-install:  ## install requirements
 ## checks
 
 .PHONY: format
-format:  ## python formatter
+format:  ## format python
 	black $(SOURCE_DIR) $(TEST_DIR)
 
 .PHONY: lint
-lint:  ## python linter
+lint:  ## lint python
 	black $(SOURCE_DIR) $(TEST_DIR) --diff
 	isort --check-only
 	flake8 $(SOURCE_DIR) $(TEST_DIR)
 	mypy $(SOURCE_DIR)
 
 .PHONY: test
-test:  ## python test
+test:  ## test python
 	pytest $(TEST_DIR) --cov $(SOURCE_DIR)
+
+.PHONY: run-ci
+run-ci: requirements-install lint test  ## run ci
 
 ## app
 
-.PHONY: python-task
-python-task:
+.PHONY: run-task
+run-task:  ## run python task
 	python -m src.task
 
-.PHONY: python-web
-python-web:
+.PHONY: run-web-dev
+run-web-dev:
 	python -m src.web
 
-.PHONY: gunicorn
-gunicorn:
+.PHONY: run-web
+run-web:  ## run python web
 	gunicorn src.web:app -c src/gunicorn_conf.py
 
 ## docker
