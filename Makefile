@@ -3,7 +3,7 @@ MAKEFLAGS += --no-builtin-rules
 SHELL := bash
 .SHELLFLAGS := -eu -o pipefail -c
 .ONESHELL:
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := help
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
@@ -20,31 +20,33 @@ IMAGE_TAG ?= latest
 
 ## main
 
-.PHONY: install
-install: install-requirements  ## install requirements
+.PHONY: help
+help:  ## print help message
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: ci
-ci: install check test  ## steps to complete CI
+ci: requirements-install lint test  ## run ci steps
 
 .PHONY: run
-run: task  ## run main task
+run: python-task  ## run main task
 
 .PHONY: serve
 serve: gunicorn  ## serve web application
 
-.PHONY: container-run
-container-run: docker-run  ## run app in container image
+.PHONY: image-run
+image-run: docker-run  ## run app image
 
 ## dependencies
 
-.PHONY: update-requirements
-update-requirements:  ## update requirements
+.PHONY: requirements-update
+requirements-update:  ## update requirements
 	pip install --upgrade pip setuptools pip-tools
 	pip-compile --upgrade --build-isolation --output-file requirements/main.txt requirements/main.in
 	pip-compile --upgrade --build-isolation --output-file requirements/dev.txt requirements/dev.in
 
-.PHONY: install-requirements
-install-requirements:  ## install requirements
+.PHONY: requirements-install
+requirements-install:  ## install requirements
+	pip install --upgrade pip
 	pip install -r requirements/main.txt -r requirements/dev.txt
 
 ## checks
@@ -53,8 +55,8 @@ install-requirements:  ## install requirements
 format:  ## python formatter
 	black $(SOURCE_DIR) $(TEST_DIR)
 
-.PHONY: check
-check:  ## python linter
+.PHONY: lint
+lint:  ## python linter
 	black $(SOURCE_DIR) $(TEST_DIR) --diff
 	isort --check-only
 	flake8 $(SOURCE_DIR) $(TEST_DIR)
@@ -66,22 +68,22 @@ test:  ## python test
 
 ## app
 
-.PHONY: task
-task:
+.PHONY: python-task
+python-task:
 	python -m src.task
 
-.PHONY: web
-web:
+.PHONY: python-web
+python-web:
 	python -m src.web
 
 .PHONY: gunicorn
 gunicorn:
 	gunicorn src.web:app -c src/gunicorn_conf.py
 
-## dockerm
+## docker
 
 .PHONY: docker-build
-docker-builder:  ## build app image builder
+docker-builder:
 	docker pull $(IMAGE_NAME):builder || true
 	docker build . \
 		--build-arg ENVIRONMENT=$(ENVIRONMENT) \
@@ -114,12 +116,12 @@ docker-run:  ## run app image
 		$(ARGS)
 
 .PHONY: docker-exec
-docker-exec:  ## exec app image
+docker-exec:
 	docker exec -it \
 		$(shell docker ps -q  --filter ancestor=$(IMAGE_NAME):$(IMAGE_TAG)) \
 		/bin/bash
 
 .PHONY: docker-stop
-docker-stop:  ## terminate app image run
+docker-stop:
 	docker stop \
 	  $(shell docker ps -q  --filter ancestor=$(IMAGE_NAME):$(IMAGE_TAG))
