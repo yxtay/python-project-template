@@ -1,6 +1,7 @@
 -c main.txt
 black
 flake8
+isort
 jupyterlab
 mypy
 pre-commit
