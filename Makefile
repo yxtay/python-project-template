@@ -63,7 +63,7 @@ run-task:  ## run python task
 
 .PHONY: run-web-dev
 run-web-dev:
-	python -m src.web
+	uvicorn src.web:app --reload
 
 .PHONY: run-web
 run-web:  ## run python web

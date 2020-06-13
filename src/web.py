@@ -21,9 +21,3 @@ async def hello(greeting: str = "Hello", name: str = "World") -> Dict[str, str]:
     response = {"message": message}
     logger.info("hello response", extra={"response": response})
     return response
-
-
-if __name__ == "__main__":
-    import uvicorn  # type: ignore
-
-    uvicorn.run("src.web:app", reload=True)
