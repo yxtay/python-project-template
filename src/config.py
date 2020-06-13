@@ -1,4 +1,6 @@
 import os
+from functools import lru_cache
+from typing import Any
 
 import typer
 from pydantic import BaseSettings
@@ -30,13 +32,16 @@ class ProductionConfig(DevelopmentConfig):
     log_file = ""
 
 
-def get_config(environment: str = os.environ.get("ENVIRONMENT", "dev")) -> DevelopmentConfig:
+@lru_cache
+def get_config(
+    environment: str = os.environ.get("ENVIRONMENT", "dev"), **kwargs: Any
+) -> DevelopmentConfig:
     configs = {
-        "dev": DevelopmentConfig(),
-        "stg": StagingConfig(),
-        "prod": ProductionConfig(),
+        "dev": DevelopmentConfig,
+        "stg": StagingConfig,
+        "prod": ProductionConfig,
     }
-    return configs[environment]
+    return configs[environment](**kwargs)
 
 
 config = get_config()

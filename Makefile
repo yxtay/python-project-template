@@ -10,12 +10,12 @@ SHELL := bash
 ENVIRONMENT ?= dev
 ARGS =
 APP_NAME = $(shell python -m src.config app_name)
-SOURCE_DIR = src
-TEST_DIR = tests
+SOURCE_DIR := src
+TEST_DIR := tests
 
 IMAGE_HOST := docker.io
 IMAGE_REPO := yxtay
-IMAGE_NAME := $(IMAGE_HOST)/$(IMAGE_REPO)/$(APP_NAME)
+IMAGE_NAME = $(IMAGE_HOST)/$(IMAGE_REPO)/$(APP_NAME)
 IMAGE_TAG ?= latest
 
 .PHONY: help
@@ -24,16 +24,20 @@ help:  ## print help message
 
 ## dependencies
 
-.PHONY: requirements-update
-requirements-update:  ## update requirements
+.PHONY: deps-update
+deps-update:
 	pip install --upgrade pip setuptools pip-tools
 	pip-compile --upgrade --build-isolation --output-file requirements/main.txt requirements/main.in
 	pip-compile --upgrade --build-isolation --output-file requirements/dev.txt requirements/dev.in
 
-.PHONY: requirements-install
-requirements-install:  ## install requirements
+.PHONY: deps-install
+deps-install:  ## install dependencies
 	pip install --upgrade pip
 	pip install -r requirements/main.txt -r requirements/dev.txt
+
+.PHONY: deps-sync
+deps-sync: deps-update  ## sync dependencies with environment
+	pip-sync requirements/main.txt requirements/dev.txt
 
 ## checks
 
@@ -53,7 +57,7 @@ test:  ## test python
 	pytest $(TEST_DIR) --cov $(SOURCE_DIR)
 
 .PHONY: run-ci
-run-ci: requirements-install lint test  ## run ci
+run-ci: deps-install lint test  ## run ci
 
 ## app
 
@@ -92,7 +96,7 @@ docker-build:  ## build app image
 		--target app
 
 .PHONY: docker-push
-docker-push:  ## push app image
+docker-push:
 	docker push $(IMAGE_NAME):builder || true
 	docker push $(IMAGE_NAME):$(IMAGE_TAG)
 
@@ -113,4 +117,4 @@ docker-exec:
 .PHONY: docker-stop
 docker-stop:
 	docker stop \
-	  $(shell docker ps -q  --filter ancestor=$(IMAGE_NAME):$(IMAGE_TAG))
+		$(shell docker ps -q  --filter ancestor=$(IMAGE_NAME):$(IMAGE_TAG))

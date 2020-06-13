@@ -10,7 +10,7 @@ reload = True  # default: False
 
 # logging
 loglevel = "info"  # default: "info"
-worker_tmp_dir = "/dev/shm"
+worker_tmp_dir = "/dev/shm"  # default: None
 
 # server socket
 host = os.environ.get("HOST", "0.0.0.0")
