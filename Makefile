@@ -26,34 +26,34 @@ help:  ## print help message
 
 .PHONY: deps-update
 deps-update:
-	pip install --upgrade pip setuptools pip-tools
+	pip install --upgrade pip pip-tools
 	pip-compile --upgrade --build-isolation --output-file requirements/main.txt requirements/main.in
 	pip-compile --upgrade --build-isolation --output-file requirements/dev.txt requirements/dev.in
+
+.PHONY: deps-sync
+deps-sync: deps-update
+	pip-sync requirements/main.txt requirements/dev.txt
 
 .PHONY: deps-install
 deps-install:  ## install dependencies
 	pip install --upgrade pip
 	pip install -r requirements/main.txt -r requirements/dev.txt
 
-.PHONY: deps-sync
-deps-sync: deps-update  ## sync dependencies with environment
-	pip-sync requirements/main.txt requirements/dev.txt
-
 ## checks
 
 .PHONY: format
-format:  ## format python
+format:
 	black $(SOURCE_DIR) $(TEST_DIR)
 
 .PHONY: lint
-lint:  ## lint python
+lint:
 	black $(SOURCE_DIR) $(TEST_DIR) --diff
 	isort --check-only
 	flake8 $(SOURCE_DIR) $(TEST_DIR)
 	mypy $(SOURCE_DIR)
 
 .PHONY: test
-test:  ## test python
+test:
 	pytest $(TEST_DIR) --cov $(SOURCE_DIR)
 
 .PHONY: run-ci
@@ -76,17 +76,13 @@ run-web:  ## run python web
 ## docker
 
 .PHONY: docker-build
-docker-builder:
+docker-build:  ## build app image
 	docker pull $(IMAGE_NAME):builder || true
 	docker build . \
 		--build-arg ENVIRONMENT=$(ENVIRONMENT) \
 		--cache-from $(IMAGE_NAME):builder \
 		--tag $(IMAGE_NAME):builder \
 		--target builder
-
-.PHONY: docker-build
-docker-build:  ## build app image
-	docker pull $(IMAGE_NAME):builder || true
 	docker pull $(IMAGE_NAME):latest || true
 	docker build . \
 		--build-arg ENVIRONMENT=$(ENVIRONMENT) \

@@ -9,7 +9,7 @@ from src.logger import configure_log_handlers, get_logger
 
 
 class DevelopmentConfig(BaseSettings):
-    app_name: str = "python-app-starter"
+    app_name: str = "python-project-template"
     environment: str = "dev"
 
     # logging

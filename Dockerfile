@@ -1,43 +1,33 @@
 ##
-# base
+# builder
 ##
-FROM python:3.7.6-slim AS base
+FROM python:3.8.3 AS builder
 MAINTAINER wyextay@gmail.com
 
-RUN apt-get update && apt-get install --no-install-recommends --yes \
-    make \
-    && rm -rf /var/lib/apt/lists/*
-
 # set up user
-RUN groupadd -g 999 appuser && \
-    useradd -r -u 999 -g appuser --create-home appuser
-
-# set up environment
-ENV HOME=/home/appuser
-ENV VIRTUAL_ENV=$HOME/.venv
-ENV PATH=$VIRTUAL_ENV/bin:$PATH
+ARG USER=app
+RUN useradd --create-home --no-log-init --system --user-group $USER
+USER $USER
+ARG HOME=/home/$USER
 WORKDIR $HOME
 
 # set up python
-USER appuser
+ARG VIRTUAL_ENV=$HOME/.venv
+ENV PATH=$VIRTUAL_ENV/bin:$PATH
 RUN python -m venv $VIRTUAL_ENV && \
     pip install --no-cache-dir --upgrade pip
 
-##
-# builder
-##
-FROM base as builder
-USER root
-
-USER appuser
+# install dependencies
 COPY requirements/main.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt && \
     python --version && \
     pip freeze
 
+# copy project files
 COPY Makefile Makefile
 COPY src src
 
+EXPOSE 8000
 ARG ENVIRONMENT=prod
 ENV ENVIRONMENT $ENVIRONMENT
 CMD ["make", "run-web"]
@@ -45,12 +35,24 @@ CMD ["make", "run-web"]
 ##
 # app
 ##
-FROM base AS app
-USER appuser
+FROM python:3.8.3-slim AS app
+MAINTAINER wyextay@gmail.com
 
-COPY --from=builder --chown=appuser:appuser $HOME $HOME
+RUN apt-get update && apt-get install --no-install-recommends --yes make && \
+    rm -rf /var/lib/apt/lists/*
 
+# set up user
+ARG USER=app
+RUN useradd --create-home --no-log-init --system --user-group $USER
+USER $USER
+ARG HOME=/home/$USER
+WORKDIR $HOME
+
+ARG VIRTUAL_ENV=$HOME/.venv
+ENV PATH=$VIRTUAL_ENV/bin:$PATH
+COPY --from=builder --chown=$USER:$USER $HOME $HOME
+
+EXPOSE 8000
 ARG ENVIRONMENT=prod
 ENV ENVIRONMENT=$ENVIRONMENT
-EXPOSE 8000
 CMD ["make", "run-web"]

@@ -22,7 +22,6 @@ filelock==3.0.12          # via virtualenv
 flake8==3.8.3             # via -r requirements/dev.in
 identify==1.4.19          # via pre-commit
 idna==2.9                 # via requests
-importlib-metadata==1.6.1  # via flake8, jsonschema, pluggy, pre-commit, pytest, virtualenv
 ipykernel==5.3.0          # via notebook
 ipython-genutils==0.2.0   # via nbformat, notebook, traitlets
 ipython==7.15.0           # via ipykernel
@@ -83,7 +82,6 @@ urllib3==1.25.9           # via requests
 virtualenv==20.0.23       # via pre-commit
 wcwidth==0.2.4            # via prompt-toolkit, pytest
 webencodings==0.5.1       # via bleach
-zipp==3.1.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

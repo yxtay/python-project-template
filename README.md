@@ -1,2 +1,2 @@
-# python-app-starter
-Starter template for python applications
+# python-project-template
+Starter template for python projects
