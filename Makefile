@@ -5,7 +5,6 @@ SHELL := bash
 .ONESHELL:
 .DEFAULT_GOAL := help
 .DELETE_ON_ERROR:
-.SUFFIXES:
 
 ENVIRONMENT ?= dev
 ARGS =
@@ -27,12 +26,16 @@ help:  ## print help message
 .PHONY: deps-update
 deps-update:
 	pip install --upgrade pip pip-tools
-	pip-compile --upgrade --build-isolation --output-file requirements/main.txt requirements/main.in
-	pip-compile --upgrade --build-isolation --output-file requirements/dev.txt requirements/dev.in
+	pip-compile --upgrade --output-file requirements/main.txt requirements/main.in
+	pip-compile --upgrade --output-file requirements/dev.txt requirements/dev.in
 
 .PHONY: deps-sync
-deps-sync: deps-update
+deps-sync:
+	pip install --upgrade pip pip-tools
 	pip-sync requirements/main.txt requirements/dev.txt
+
+.PHONY: deps-update-sync
+deps-update-sync: deps-update deps-sync
 
 .PHONY: deps-install
 deps-install:  ## install dependencies
@@ -77,23 +80,23 @@ run-web:  ## run python web
 
 .PHONY: docker-build
 docker-build:  ## build app image
-	docker pull $(IMAGE_NAME):builder || true
+	docker pull $(IMAGE_NAME):dev || true
 	docker build . \
 		--build-arg ENVIRONMENT=$(ENVIRONMENT) \
-		--cache-from $(IMAGE_NAME):builder \
-		--tag $(IMAGE_NAME):builder \
-		--target builder
+		--cache-from $(IMAGE_NAME):dev \
+		--tag $(IMAGE_NAME):dev \
+		--target dev
 	docker pull $(IMAGE_NAME):latest || true
 	docker build . \
 		--build-arg ENVIRONMENT=$(ENVIRONMENT) \
-		--cache-from $(IMAGE_NAME):builder \
+		--cache-from $(IMAGE_NAME):dev \
 		--cache-from $(IMAGE_NAME):latest \
 		--tag $(IMAGE_NAME):$(IMAGE_TAG) \
-		--target app
+		--target prod
 
 .PHONY: docker-push
 docker-push:
-	docker push $(IMAGE_NAME):builder || true
+	docker push $(IMAGE_NAME):dev || true
 	docker push $(IMAGE_NAME):$(IMAGE_TAG)
 
 .PHONY: docker-run

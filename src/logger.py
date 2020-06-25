@@ -68,10 +68,6 @@ def configure_log_handlers(console: bool = True, log_path: str = "main.log") -> 
         log_qlistener (logging.handlers.QueueListener): configured log queue listener
     """
     global log_qlistener
-    try:
-        log_qlistener.stop()
-    except (AttributeError, NameError):
-        pass
 
     handlers: List[logging.Handler] = []
 

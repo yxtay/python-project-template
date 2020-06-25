@@ -1,7 +1,9 @@
+ARG PYTHON_VERSION=3.7.7
+
 ##
-# builder
+# dev
 ##
-FROM python:3.8.3 AS builder
+FROM python:$PYTHON_VERSION AS dev
 MAINTAINER wyextay@gmail.com
 
 # set up user
@@ -13,29 +15,33 @@ WORKDIR $HOME
 
 # set up python
 ARG VIRTUAL_ENV=$HOME/.venv
-ENV PATH=$VIRTUAL_ENV/bin:$PATH
+ENV PATH=$VIRTUAL_ENV/bin:$PATH \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DEFAULT_TIMEOUT=60 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1
 RUN python -m venv $VIRTUAL_ENV && \
     pip install --no-cache-dir --upgrade pip
 
 # install dependencies
 COPY requirements/main.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt && \
-    python --version && \
-    pip freeze
+    python --version && pip freeze
 
 # copy project files
 COPY Makefile Makefile
 COPY src src
 
 EXPOSE 8000
-ARG ENVIRONMENT=prod
+ARG ENVIRONMENT=dev
 ENV ENVIRONMENT $ENVIRONMENT
 CMD ["make", "run-web"]
 
 ##
-# app
+# prod
 ##
-FROM python:3.8.3-slim AS app
+FROM python:$PYTHON_VERSION-slim AS prod
 MAINTAINER wyextay@gmail.com
 
 RUN apt-get update && apt-get install --no-install-recommends --yes make && \
@@ -49,8 +55,14 @@ ARG HOME=/home/$USER
 WORKDIR $HOME
 
 ARG VIRTUAL_ENV=$HOME/.venv
-ENV PATH=$VIRTUAL_ENV/bin:$PATH
-COPY --from=builder --chown=$USER:$USER $HOME $HOME
+ENV PATH=$VIRTUAL_ENV/bin:$PATH \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DEFAULT_TIMEOUT=60 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1
+COPY --from=dev --chown=$USER:$USER $HOME $HOME
+RUN python --version && pip freeze
 
 EXPOSE 8000
 ARG ENVIRONMENT=prod
