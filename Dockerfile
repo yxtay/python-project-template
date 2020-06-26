@@ -25,7 +25,7 @@ RUN python -m venv $VIRTUAL_ENV && \
     pip install --no-cache-dir --upgrade pip
 
 # install dependencies
-COPY requirements/main.txt requirements.txt
+COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt && \
     python --version && pip freeze
 

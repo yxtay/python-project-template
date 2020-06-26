@@ -1,7 +1,0 @@
-fastapi~=0.55.1
-gunicorn~=20.0.4
-pydantic[dotenv]~=1.5.1
-python-dotenv~=0.13.0
-python-json-logger~=0.1.11
-typer~=0.2.1
-uvicorn~=0.11.5

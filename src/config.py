@@ -32,7 +32,7 @@ class ProductionConfig(DevelopmentConfig):
     log_file = ""
 
 
-@lru_cache
+@lru_cache(128)
 def get_config(
     environment: str = os.environ.get("ENVIRONMENT", "dev"), **kwargs: Any
 ) -> DevelopmentConfig:
