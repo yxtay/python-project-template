@@ -28,7 +28,9 @@ deps-install:  ## install dependencies
 	pip install poetry
 	poetry install --no-root
 
-poetry.lock: pyproject.toml
+.PHONY: deps-update
+deps-update:
+	pip install poetry
 	poetry update
 
 requirements.txt: poetry.lock
@@ -68,6 +70,9 @@ run-web-dev:
 run-web:  ## run python web
 	gunicorn src.web:app -c src/gunicorn_conf.py
 
+.PHONY: run
+run: run-web  ## run main python app
+
 ## docker
 
 .PHONY: docker-build
@@ -94,6 +99,7 @@ docker-push:
 .PHONY: docker-run
 docker-run:  ## run app image
 	docker run --rm \
+	    --mount type=bind,source=$(shell pwd),target=/home/app \
 		-e ENVIRONMENT=$(ENVIRONMENT) \
 		-p 8000:8000 \
 		$(IMAGE_NAME):$(IMAGE_TAG) \

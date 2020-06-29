@@ -1,14 +1,14 @@
 import os
+from configparser import ConfigParser
 from functools import lru_cache
 from typing import Any
 
 import typer
 from pydantic import BaseSettings
-
 from src.logger import configure_log_handlers, get_logger
 
 
-class DevelopmentConfig(BaseSettings):
+class AppConfig(BaseSettings):
     app_name: str = "python-project-template"
     environment: str = "dev"
 
@@ -22,26 +22,19 @@ class DevelopmentConfig(BaseSettings):
         env_file = ".env"
 
 
-class StagingConfig(DevelopmentConfig):
-    environment = "stg"
-    log_file = ""
-
-
-class ProductionConfig(DevelopmentConfig):
-    environment = "prod"
-    log_file = ""
-
-
-@lru_cache(128)
+@lru_cache()
 def get_config(
-    environment: str = os.environ.get("ENVIRONMENT", "dev"), **kwargs: Any
-) -> DevelopmentConfig:
-    configs = {
-        "dev": DevelopmentConfig,
-        "stg": StagingConfig,
-        "prod": ProductionConfig,
-    }
-    return configs[environment](**kwargs)
+    ini_path: str = "configs/main.ini",
+    environment: str = os.environ.get("ENVIRONMENT", "dev"),
+    **kwargs: Any,
+) -> AppConfig:
+    # read configs
+    parser = ConfigParser()
+    parser.read(ini_path)
+    # environment config
+    config = parser[environment]
+    app_config = AppConfig(**dict(config.items()), **kwargs)
+    return app_config
 
 
 config = get_config()

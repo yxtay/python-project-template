@@ -26,8 +26,8 @@ RUN python -m venv $VIRTUAL_ENV && \
 
 # install dependencies
 COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt && \
-    python --version && pip freeze
+RUN pip install -r requirements.txt && \
+    python --version && pip list
 
 # copy project files
 COPY Makefile Makefile
@@ -36,7 +36,7 @@ COPY src src
 EXPOSE 8000
 ARG ENVIRONMENT=dev
 ENV ENVIRONMENT $ENVIRONMENT
-CMD ["make", "run-web"]
+CMD ["make", "run"]
 
 ##
 # prod
@@ -62,9 +62,9 @@ ENV PATH=$VIRTUAL_ENV/bin:$PATH \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1
 COPY --from=dev --chown=$USER:$USER $HOME $HOME
-RUN python --version && pip freeze
+RUN python --version && pip list
 
 EXPOSE 8000
 ARG ENVIRONMENT=prod
 ENV ENVIRONMENT=$ENVIRONMENT
-CMD ["make", "run-web"]
+CMD ["make", "run"]
