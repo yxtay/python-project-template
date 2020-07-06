@@ -30,7 +30,6 @@ deps-install:  ## install dependencies
 
 .PHONY: deps-update
 deps-update:
-	pip install poetry
 	poetry update
 
 requirements.txt: poetry.lock

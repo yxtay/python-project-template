@@ -4,21 +4,23 @@ Starter template for python projects
 
 ## Features
 
-- environment, packages and dependency management
+- environment and dependency management
+  - environment management with Conda
+  - dependency management with Poetry
 - continuous integration
-  - code formatting with isort and black
-  - code linting with isort, black, flake8 and mypy
+  - code formatting with isort and Black
+  - code linting with isort, Black, Flake8 and Mypy
   - unit tests with pytest
   - pre-commit hooks
 - application
   - logging with standard logging and python-json-logger
   - configuration with standard configparser, python-dotenv and pydantic
-  - command line with typer
-  - web service with fastapi, uvicorn and gunicorn
-  - commands managed with make
+  - command line with Typer
+  - web service with FastAPI, Uvicorn and Gunicorn
+  - commands managed with Make
 - deployment with Docker
 
-## Environment, package and dependency management
+## Environment and dependency management
 
 Use Conda to create a virtual environment and activate it for the project.
 
@@ -30,13 +32,7 @@ conda create --name $PROJECT_NAME --yes python=$PYTHON_VERSION
 conda activate $PROJECT_NAME
 ```
 
-Install Poetry with pip and use it to install packages and manage 
-dependencies. While this is not the recommended usage of Poetry, it 
-makes fewer assumption on the tools installed on the developer's 
-machine and better facilitates collaboration. 
-
-Developers may easily install all project dependencies with Poetry 
-and start collaborating.
+Install Poetry with pip. Then install project dependencies with Poetry.
 
 ```bash
 pip install Poetry
@@ -46,9 +42,7 @@ poetry install
 make deps-install
 ```
 
-Dependencies are tracked in `pyproject.toml`. Use Poetry to add them. 
-Poetry will resolve the dependency graph of all the dependencies, 
-install/uninstall them in the environment and track them in `poetry.lock`.
+Use Poetry to add project and development dependencies into `pyproject.toml`.
 
 NOTE: Poetry must be included as a development dependency to prevent
 Poetry from uninstalling its own dependencies.
@@ -59,4 +53,46 @@ poetry add --dev poetry
 
 # project dependency
 poetry add pydantic
-``` 
+```
+
+## Tools
+
+- [Conda][conda]
+- [Poetry][poetry]
+- [isort][isort]
+- [Black][black]
+- [Flake8][flake8]
+- [Mypy][mypy]
+- [pytest][pytest]
+- [pre-commit][pre-commit]
+- [logging][logging]
+- [python-json-logger][python-json-logger]
+- [configparser][configparser]
+- [python-dotenv][python-dotenv]
+- [pydantic][pydantic]
+- [Typer][typer]
+- [FastAPI][fastapi]
+- [Uvicorn][uvicorn]
+- [Gunicorn][gunicorn]
+- [Make][make]
+- [Docker][docker]
+
+[conda]: https://docs.conda.io/en/latest
+[poetry]: https://python-poetry.org
+[isort]: https://timothycrosley.github.io/isort
+[black]: https://black.readthedocs.io/en/stable
+[flake8]: https://flake8.pycqa.org/en/latest
+[mypy]: http://www.mypy-lang.org
+[pytest]: https://docs.pytest.org/en/stable
+[pre-commit]: https://pre-commit.com/
+[logging]: https://docs.python.org/3/library/logging.html
+[python-json-logger]: https://github.com/madzak/python-json-logger
+[configparser]: https://docs.python.org/3/library/configparser.html
+[python-dotenv]: https://saurabh-kumar.com/python-dotenv
+[pydantic]: https://pydantic-docs.helpmanual.io
+[typer]: https://typer.tiangolo.com
+[fastapi]: https://fastapi.tiangolo.com
+[uvicorn]: https://www.uvicorn.org
+[gunicorn]: https://gunicorn.org
+[make]: https://www.gnu.org/software/make
+[docker]: https://www.docker.com
