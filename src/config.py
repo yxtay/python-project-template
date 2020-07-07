@@ -5,12 +5,16 @@ from typing import Any
 
 import typer
 from pydantic import BaseSettings
+
 from src.logger import configure_log_handlers, get_logger
 
 
 class AppConfig(BaseSettings):
-    app_name: str = "python-project-template"
+    app_name: str = ""
     environment: str = "dev"
+
+    image_host: str = ""
+    image_repo: str = ""
 
     # logging
     log_console: bool = True
@@ -32,8 +36,9 @@ def get_config(
     parser = ConfigParser()
     parser.read(ini_path)
     # environment config
-    config = parser[environment]
-    app_config = AppConfig(**dict(config.items()), **kwargs)
+    config = dict(parser[environment].items())
+    config.update(kwargs)
+    app_config = AppConfig(**config)
     return app_config
 
 

@@ -4,10 +4,9 @@ Starter template for python projects
 
 ## Features
 
-- environment and dependency management
-  - environment management with Conda
-  - dependency management with Poetry
-- continuous integration
+- environment management with Conda
+- project metadata and dependency management with Poetry
+- preconfigured continuous integration tasks
   - code formatting with isort and Black
   - code linting with isort, Black, Flake8 and Mypy
   - unit tests with pytest
@@ -17,28 +16,38 @@ Starter template for python projects
   - configuration with standard configparser, python-dotenv and pydantic
   - command line with Typer
   - web service with FastAPI, Uvicorn and Gunicorn
-  - commands managed with Make
-- deployment with Docker
+- deployment with Docker images
+  - development image based on `python:latest`
+  - lightweight production image based on `python:slim` using multi-stage build
+- Make formula for common development tasks
+  - install dependencies
+  - run continuous integration tasks
+  - run application
+  - build Docker images
 
-## Environment and dependency management
+## Usage
+
+Clone this repository or [use it as a template](generate) to generate a new repository.
+
+Update the project name and metadata in `pyproject.toml` and `configs/main.ini`.
+
+### Create environment
 
 Use Conda to create a virtual environment and activate it for the project.
 
 ```bash
 PROJECT_NAME = python-project-template
 PYTHON_VERSION = 3.7
-conda create --name $PROJECT_NAME --yes python=$PYTHON_VERSION
 
+conda create --name $PROJECT_NAME --yes python=$PYTHON_VERSION
 conda activate $PROJECT_NAME
 ```
+
+### Install dependencies
 
 Install Poetry with pip. Then install project dependencies with Poetry.
 
 ```bash
-pip install Poetry
-poetry install
-
-# using make
 make deps-install
 ```
 

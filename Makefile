@@ -12,8 +12,8 @@ APP_NAME = $(shell python -m src.config app_name)
 SOURCE_DIR := src
 TEST_DIR := tests
 
-IMAGE_HOST := docker.io
-IMAGE_REPO := yxtay
+IMAGE_HOST = $(shell python -m src.config image_host)
+IMAGE_REPO = $(shell python -m src.config image_repo)
 IMAGE_NAME = $(IMAGE_HOST)/$(IMAGE_REPO)/$(APP_NAME)
 IMAGE_TAG ?= latest
 
