@@ -11,6 +11,7 @@ Starter template for python projects
   - code linting with isort, Black, Flake8 and Mypy
   - unit tests with pytest
   - pre-commit hooks
+  - CICD pipelines with GitHub Actions
 - application
   - logging with standard logging and python-json-logger
   - configuration with standard configparser, python-dotenv and pydantic

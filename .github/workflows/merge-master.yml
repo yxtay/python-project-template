@@ -1,7 +1,7 @@
-name: push-to-master
+name: merge-to-master
 
 on:
-  push:
+  pull_request:
     branches:
       - master
 
@@ -32,6 +32,10 @@ jobs:
 
     - name: Docker build
       run: make docker-build
+      env:
+        IMAGE_TAG: merge
 
     - name: Docker push
       run: make docker-push
+      env:
+        IMAGE_TAG: merge
