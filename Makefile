@@ -28,6 +28,13 @@ deps-install:  ## install dependencies
 	pip install poetry
 	poetry install --no-root
 
+.PHONY: deps-install-ci
+deps-install-ci:
+	pip install poetry
+	poetry config virtualenvs.create false
+	poetry install --no-root
+	poetry show
+
 .PHONY: deps-update
 deps-update:
 	poetry update
@@ -54,7 +61,7 @@ test:
 	pytest $(TEST_DIR) --cov $(SOURCE_DIR)
 
 .PHONY: run-ci
-run-ci: deps-install lint test  ## run ci
+run-ci: deps-install-ci lint test  ## run ci
 
 ## app
 

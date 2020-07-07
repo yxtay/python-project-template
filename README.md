@@ -27,7 +27,7 @@ Starter template for python projects
 
 ## Usage
 
-Clone this repository or [use it as a template](generate) to generate a new repository.
+Clone this repository or [use it as a template][generate] to generate a new repository.
 
 Update the project name and metadata in `pyproject.toml` and `configs/main.ini`.
 
@@ -105,3 +105,5 @@ poetry add pydantic
 [gunicorn]: https://gunicorn.org
 [make]: https://www.gnu.org/software/make
 [docker]: https://www.docker.com
+
+[generate]: https://github.com/yxtay/python-project-template/generate
