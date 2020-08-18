@@ -17,7 +17,7 @@ uvicorn = "^0.11.8"
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
 flake8 = "^3.8.3"
-isort = "^4.3.21"
+isort = "^5.4.2"
 jupyterlab = "^2.2.4"
 mypy = "^0.782"
 poetry = "^1.0.10"
@@ -26,7 +26,7 @@ pytest = "^5.4.3"
 pytest-cov = "^2.10.0"
 
 [tool.black]
-line-length = 100
+line-length = 88
 target-version = ["py37"]
 include = ".pyi?$"
 exclude = """
@@ -51,7 +51,7 @@ exclude = """
 # https://github.com/psf/black/blob/master/docs/compatible_configs.md
 force_grid_wrap = 0
 include_trailing_comma = true
-line_length = 100
+line_length = 88
 multi_line_output = 3
 not_skip = "__init__.py"
 use_parentheses = true
