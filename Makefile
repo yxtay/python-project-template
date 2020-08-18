@@ -54,7 +54,7 @@ format:
 
 .PHONY: lint
 lint:
-	isort --check-only
+	isort . --check --diff
 	black $(SOURCE_DIR) $(TEST_DIR) --diff
 	flake8 $(SOURCE_DIR) $(TEST_DIR)
 	mypy $(SOURCE_DIR)
