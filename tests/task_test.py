@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
 import pytest  # type: ignore
 from typer.testing import CliRunner
 
 from src.task import app
 
 runner = CliRunner()
-
 cases = ["World", "Name", "name", "NAME"]
 
 

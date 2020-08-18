@@ -8,7 +8,7 @@ authors = ["yxtay <wyextay@gmail.com>"]
 python = "~3.7.7"
 fastapi = "^0.58.1"
 gunicorn = "^20.0.4"
-pydantic = {extras = ["dotenv"], version = "^1.6.1"}
+pydantic = { extras = ["dotenv"], version = "^1.6.1" }
 python-dotenv = "^0.13.0"
 python-json-logger = "^0.1.11"
 typer = "^0.3.1"
@@ -49,11 +49,11 @@ exclude = """
 [tool.isort]
 # compatible with psf/black
 # https://github.com/psf/black/blob/master/docs/compatible_configs.md
+float_to_top = true
 force_grid_wrap = 0
 include_trailing_comma = true
 line_length = 88
 multi_line_output = 3
-not_skip = "__init__.py"
 use_parentheses = true
 
 [build-system]
