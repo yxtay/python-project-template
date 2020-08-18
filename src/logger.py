@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 import queue
 import sys
@@ -58,7 +59,9 @@ def __get_stdout_handler() -> logging.StreamHandler:
     return stdout_handler
 
 
-def configure_log_handlers(console: bool = True, log_path: str = "main.log") -> QueueListener:
+def configure_log_handlers(
+    console: bool = True, log_path: str = "main.log"
+) -> QueueListener:
     """
     Configure log queue listener to log into file and console.
     Args:
