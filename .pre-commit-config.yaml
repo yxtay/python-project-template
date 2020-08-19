@@ -20,6 +20,7 @@ repos:
       - id: detect-aws-credentials
         args: [--allow-missing-credentials]
       - id: detect-private-key
+      # - id: double-quote-string-fixer
       - id: end-of-file-fixer
       - id: fix-encoding-pragma
       - id: file-contents-sorter
@@ -44,3 +45,7 @@ repos:
     rev: 3.8.3
     hooks:
       - id: flake8
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.6.2
+    hooks:
+      - id: bandit

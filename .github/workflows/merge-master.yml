@@ -13,29 +13,29 @@ jobs:
       ENVIRONMENT: prod
     steps:
 
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.7
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
 
-    - name: Run CI
-      run: make run-ci
+      - name: Run CI
+        run: make run-ci
 
-    - name: Docker login
-      run: echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USER} --password-stdin
-      env:
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_USER: yxtay
+      - name: Docker login
+        run: echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USER} --password-stdin
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USER: yxtay
 
-    - name: Docker build
-      run: make docker-build
-      env:
-        IMAGE_TAG: merge
+      - name: Docker build
+        run: make docker-build
+        env:
+          IMAGE_TAG: merge
 
-    - name: Docker push
-      run: make docker-push
-      env:
-        IMAGE_TAG: merge
+      - name: Docker push
+        run: make docker-push
+        env:
+          IMAGE_TAG: merge

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import multiprocessing
 import os
 
@@ -10,10 +11,10 @@ reload = True  # default: False
 
 # logging
 loglevel = "info"  # default: "info"
-worker_tmp_dir = "/dev/shm"  # default: None
+worker_tmp_dir = "/dev/shm"  # nosec, default: None
 
 # server socket
-host = os.environ.get("HOST", "0.0.0.0")
+host = os.environ.get("HOST", "0.0.0.0")  # nosec
 port = os.environ.get("PORT", "8000")
 bind = [f"{host}:{port}"]  # default: ["127.0.0.1:8000"]
 
