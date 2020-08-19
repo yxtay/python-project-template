@@ -49,7 +49,7 @@ requirements-dev.txt: poetry.lock
 
 .PHONY: format
 format:
-	isort --apply
+	isort .
 	black $(SOURCE_DIR) $(TEST_DIR)
 
 .PHONY: lint
