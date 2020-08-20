@@ -49,7 +49,7 @@ requirements-dev.txt: poetry.lock
 
 .PHONY: format
 format:
-	isort --apply
+	isort .
 	black $(SOURCE_DIR) $(TEST_DIR)
 
 .PHONY: lint
@@ -57,6 +57,7 @@ lint:
 	isort . --check --diff
 	black $(SOURCE_DIR) $(TEST_DIR) --diff
 	flake8 $(SOURCE_DIR) $(TEST_DIR)
+	bandit -r $(SOURCE_DIR)
 	mypy $(SOURCE_DIR)
 
 .PHONY: test

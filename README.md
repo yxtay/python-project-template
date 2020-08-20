@@ -8,7 +8,7 @@ Starter template for python projects
 - project metadata and dependency management with Poetry
 - preconfigured continuous integration tasks
   - code formatting with isort and Black
-  - code linting with isort, Black, Flake8 and Mypy
+  - code linting with isort, Black, Flake8, Bandit and Mypy
   - unit tests with pytest
   - pre-commit hooks
   - CICD pipelines with GitHub Actions
@@ -31,6 +31,12 @@ Starter template for python projects
 Clone this repository or [use it as a template][generate] to generate a new repository.
 
 Update the project name and metadata in `pyproject.toml` and `configs/main.ini`.
+
+### External dependencies
+
+- [Conda][conda]
+- [Docker][docker]
+- [Make][make]
 
 ### Create environment
 
@@ -67,34 +73,39 @@ poetry add pydantic
 
 ## Tools
 
-- [Conda][conda]
-- [Poetry][poetry]
-- [isort][isort]
-- [Black][black]
-- [Flake8][flake8]
-- [Mypy][mypy]
-- [pytest][pytest]
-- [pre-commit][pre-commit]
-- [logging][logging]
-- [python-json-logger][python-json-logger]
-- [configparser][configparser]
-- [python-dotenv][python-dotenv]
-- [pydantic][pydantic]
-- [Typer][typer]
-- [FastAPI][fastapi]
-- [Uvicorn][uvicorn]
-- [Gunicorn][gunicorn]
-- [Make][make]
-- [Docker][docker]
+- Environment management
+  - [Conda][conda]
+  - [Poetry][poetry]
+  - [Docker][docker]
+- Linting & Testing
+  - [isort][isort]
+  - [Black][black]
+  - [Flake8][flake8]
+  - [Bandit][bandit]
+  - [Mypy][mypy]
+  - [pytest][pytest]
+  - [pre-commit][pre-commit]
+- Application
+  - [logging][logging]
+  - [python-json-logger][python-json-logger]
+  - [configparser][configparser]
+  - [python-dotenv][python-dotenv]
+  - [pydantic][pydantic]
+  - [Typer][typer]
+  - [FastAPI][fastapi]
+  - [Uvicorn][uvicorn]
+  - [Gunicorn][gunicorn]
+  - [Make][make]
 
 [conda]: https://docs.conda.io/en/latest
 [poetry]: https://python-poetry.org
 [isort]: https://timothycrosley.github.io/isort
 [black]: https://black.readthedocs.io/en/stable
 [flake8]: https://flake8.pycqa.org/en/latest
+[bandit]: https://github.com/PyCQA/bandit
 [mypy]: http://www.mypy-lang.org
 [pytest]: https://docs.pytest.org/en/stable
-[pre-commit]: https://pre-commit.com/
+[pre-commit]: https://pre-commit.com
 [logging]: https://docs.python.org/3/library/logging.html
 [python-json-logger]: https://github.com/madzak/python-json-logger
 [configparser]: https://docs.python.org/3/library/configparser.html
