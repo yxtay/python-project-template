@@ -32,6 +32,12 @@ Clone this repository or [use it as a template][generate] to generate a new repo
 
 Update the project name and metadata in `pyproject.toml` and `configs/main.ini`.
 
+### External dependencies
+
+- [Conda][conda]
+- [Docker][docker]
+- [Make][make]
+
 ### Create environment
 
 Use Conda to create a virtual environment and activate it for the project.
@@ -67,26 +73,30 @@ poetry add pydantic
 
 ## Tools
 
-- [Conda][conda]
-- [Poetry][poetry]
-- [isort][isort]
-- [Black][black]
-- [Flake8][flake8]
-- [Bandit][bandit]
-- [Mypy][mypy]
-- [pytest][pytest]
-- [pre-commit][pre-commit]
-- [logging][logging]
-- [python-json-logger][python-json-logger]
-- [configparser][configparser]
-- [python-dotenv][python-dotenv]
-- [pydantic][pydantic]
-- [Typer][typer]
-- [FastAPI][fastapi]
-- [Uvicorn][uvicorn]
-- [Gunicorn][gunicorn]
-- [Make][make]
-- [Docker][docker]
+- Environment management
+  - [Conda][conda]
+  - [Poetry][poetry]
+- Linting & Testing
+  - [isort][isort]
+  - [Black][black]
+  - [Flake8][flake8]
+  - [Bandit][bandit]
+  - [Mypy][mypy]
+  - [pytest][pytest]
+  - [pre-commit][pre-commit]
+- Application
+  - [logging][logging]
+  - [python-json-logger][python-json-logger]
+  - [configparser][configparser]
+  - [python-dotenv][python-dotenv]
+  - [pydantic][pydantic]
+  - [Typer][typer]
+  - [FastAPI][fastapi]
+  - [Uvicorn][uvicorn]
+  - [Gunicorn][gunicorn]
+- Deployment
+  - [Make][make]
+  - [Docker][docker]
 
 [conda]: https://docs.conda.io/en/latest
 [poetry]: https://python-poetry.org
