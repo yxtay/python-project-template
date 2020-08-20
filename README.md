@@ -76,6 +76,7 @@ poetry add pydantic
 - Environment management
   - [Conda][conda]
   - [Poetry][poetry]
+  - [Docker][docker]
 - Linting & Testing
   - [isort][isort]
   - [Black][black]
@@ -94,9 +95,7 @@ poetry add pydantic
   - [FastAPI][fastapi]
   - [Uvicorn][uvicorn]
   - [Gunicorn][gunicorn]
-- Deployment
   - [Make][make]
-  - [Docker][docker]
 
 [conda]: https://docs.conda.io/en/latest
 [poetry]: https://python-poetry.org
