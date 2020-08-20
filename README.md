@@ -8,7 +8,7 @@ Starter template for python projects
 - project metadata and dependency management with Poetry
 - preconfigured continuous integration tasks
   - code formatting with isort and Black
-  - code linting with isort, Black, Flake8 and Mypy
+  - code linting with isort, Black, Flake8, Bandit and Mypy
   - unit tests with pytest
   - pre-commit hooks
   - CICD pipelines with GitHub Actions
@@ -72,6 +72,7 @@ poetry add pydantic
 - [isort][isort]
 - [Black][black]
 - [Flake8][flake8]
+- [Bandit][bandit]
 - [Mypy][mypy]
 - [pytest][pytest]
 - [pre-commit][pre-commit]
@@ -92,9 +93,10 @@ poetry add pydantic
 [isort]: https://timothycrosley.github.io/isort
 [black]: https://black.readthedocs.io/en/stable
 [flake8]: https://flake8.pycqa.org/en/latest
+[bandit]: https://github.com/PyCQA/bandit
 [mypy]: http://www.mypy-lang.org
 [pytest]: https://docs.pytest.org/en/stable
-[pre-commit]: https://pre-commit.com/
+[pre-commit]: https://pre-commit.com
 [logging]: https://docs.python.org/3/library/logging.html
 [python-json-logger]: https://github.com/madzak/python-json-logger
 [configparser]: https://docs.python.org/3/library/configparser.html
