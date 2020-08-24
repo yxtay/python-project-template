@@ -20,9 +20,9 @@ repos:
       - id: detect-aws-credentials
         args: [--allow-missing-credentials]
       - id: detect-private-key
-      # - id: double-quote-string-fixer
+      # - id: double-quote-string-fixer  # conflicts with black
       - id: end-of-file-fixer
-      - id: fix-encoding-pragma
+      # - id: fix-encoding-pragma  # not required for python 3
       - id: file-contents-sorter
       - id: forbid-new-submodules
       - id: mixed-line-ending
@@ -49,3 +49,4 @@ repos:
     rev: 1.6.2
     hooks:
       - id: bandit
+        args: [-lll, -iii]
