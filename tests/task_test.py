@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import pytest  # type: ignore
 from typer.testing import CliRunner
 
