@@ -57,7 +57,7 @@ lint:
 	isort . --check --diff
 	black $(SOURCE_DIR) $(TEST_DIR) --diff
 	flake8 $(SOURCE_DIR) $(TEST_DIR)
-	bandit -r $(SOURCE_DIR)
+	bandit -r $(SOURCE_DIR) -lll -iii
 	mypy $(SOURCE_DIR)
 
 .PHONY: test
