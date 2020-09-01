@@ -61,7 +61,7 @@ make deps-install
 Use Poetry to add project and development dependencies into `pyproject.toml`.
 
 NOTE: Poetry must be included as a development dependency to prevent
-Poetry from uninstalling its own dependencies.
+Poetry from uninstalling itself and its dependencies.
 
 ```bash
 # development dependency

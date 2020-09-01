@@ -6,7 +6,7 @@ from typing import Any
 import typer
 from pydantic import BaseSettings
 
-from src.logger import configure_log_handlers, get_logger
+from src.logger import configure_log_listener, get_logger
 
 
 class AppConfig(BaseSettings):
@@ -45,7 +45,7 @@ def get_config(
 config = get_config()
 
 # config logger
-configure_log_handlers(config.log_console, config.log_file)
+configure_log_listener(config.log_console, config.log_file)
 logger = get_logger(config.app_name)
 logger.debug("config", extra={"config": config.dict()})
 
