@@ -38,6 +38,7 @@ deps-install-ci:
 .PHONY: deps-update
 deps-update:
 	poetry update
+	poetry export --format requirements.txt --output requirements.txt --without-hashes
 
 requirements.txt: poetry.lock
 	poetry export --format requirements.txt --output requirements.txt --without-hashes
