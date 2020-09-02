@@ -1,3 +1,4 @@
+import atexit
 import logging
 import sys
 from logging.handlers import QueueHandler, QueueListener, RotatingFileHandler
@@ -13,6 +14,7 @@ logging.basicConfig(handlers=[logging.NullHandler()])
 log_queue: Queue = Queue()
 log_qlistener: QueueListener = QueueListener(log_queue, respect_handler_level=True)
 log_qlistener.start()
+atexit.register(log_qlistener.stop)
 
 
 class StackdriverFormatter(JsonFormatter):
@@ -79,6 +81,7 @@ def configure_log_listener(
     """
     global log_qlistener
     try:
+        atexit.register(log_qlistener.stop)
         log_qlistener.stop()
     except (AttributeError, NameError):
         pass
@@ -97,6 +100,7 @@ def configure_log_listener(
 
     log_qlistener = QueueListener(log_queue, *handlers, respect_handler_level=True)
     log_qlistener.start()
+    atexit.register(log_qlistener.stop)
     return log_qlistener
 
 
