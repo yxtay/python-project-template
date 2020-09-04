@@ -6,25 +6,25 @@ authors = ["yxtay <wyextay@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "~3.7.7"
-fastapi = "^0.58.1"
+fastapi = "^0.61.1"
 gunicorn = "^20.0.4"
 pydantic = { extras = ["dotenv"], version = "^1.6.1" }
-python-dotenv = "^0.13.0"
+python-dotenv = "^0.14.0"
 python-json-logger = "^0.1.11"
 typer = "^0.3.2"
 uvicorn = "^0.11.8"
 
 [tool.poetry.dev-dependencies]
-bandit = "^1.6.2"
-black = "^19.10b0"
-flake8 = "^3.8.3"
-isort = "^5.4.2"
-jupyterlab = "^2.2.4"
-mypy = "^0.782"
-poetry = "^1.0.10"
-pre-commit = "^2.6.0"
-pytest = "^5.4.3"
-pytest-cov = "^2.10.0"
+bandit = "*"
+black = {version = "*", allow-prereleases = true}
+flake8 = "*"
+isort = "*"
+jupyterlab = "*"
+mypy = "*"
+poetry = "*"
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [tool.black]
 line-length = 88
