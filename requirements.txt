@@ -1,12 +1,12 @@
 click==7.1.2
-fastapi==0.58.1
+fastapi==0.61.1
 gunicorn==20.0.4
 h11==0.9.0
 httptools==0.1.1; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "PyPy"
 pydantic==1.6.1
-python-dotenv==0.13.0
+python-dotenv==0.14.0
 python-json-logger==0.1.11
-starlette==0.13.4
+starlette==0.13.6
 typer==0.3.2
 uvicorn==0.11.8
 uvloop==0.14.0; sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "PyPy"
