@@ -5,31 +5,31 @@ description = ""
 authors = ["yxtay <wyextay@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "~3.9.4"
-fastapi = "^0.61.2"
-gunicorn = "^20.1.0"
-pydantic = { extras = ["dotenv"], version = "^1.8.1" }
-python-dotenv = "^0.14.0"
-python-json-logger = "^0.1.11"
-typer = "^0.3.2"
-uvicorn = "^0.11.8"
+python = "~3.8"
+fastapi = "^0.61"
+gunicorn = "^20.1"
+pydantic = { extras = ["dotenv"], version = "^1.8" }
+python-dotenv = "^0.14"
+python-json-logger = "^0.1"
+typer = "^0.3"
+uvicorn = "^0.11"
 
 [tool.poetry.dev-dependencies]
-bandit = "*"
-black = { allow-prereleases = true, version = "*" }
-flake8 = "*"
-isort = "*"
-jupyterlab = "*"
-mypy = "*"
-poetry = "*"
-pre-commit = "*"
-pre-commit-hooks = "*"
-pytest = "*"
-pytest-cov = "*"
+bandit = "^1.7"
+black = { allow-prereleases = true, version = "^20.8b1" }
+flake8 = "^3.9"
+isort = "^5.8"
+jupyterlab = "^3.0"
+mypy = "^0"
+poetry = "^1.1"
+pre-commit = "^2.12"
+pre-commit-hooks = "^3.4"
+pytest = "^6.2"
+pytest-cov = "^2.11"
 
 [tool.black]
 line-length = 88
-target-version = ["py37"]
+target-version = ["py38"]
 include = ".pyi?$"
 exclude = """
 (
@@ -50,13 +50,10 @@ exclude = """
 
 [tool.isort]
 # compatible with psf/black
+# https://pycqa.github.io/isort/docs/configuration/black_compatibility/
 # https://github.com/psf/black/blob/master/docs/compatible_configs.md
+profile = "black"
 float_to_top = true
-force_grid_wrap = 0
-include_trailing_comma = true
-line_length = 88
-multi_line_output = 3
-use_parentheses = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
