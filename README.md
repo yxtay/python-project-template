@@ -44,7 +44,7 @@ Use Conda to create a virtual environment and activate it for the project.
 
 ```bash
 PROJECT_NAME = python-project-template
-PYTHON_VERSION = 3.7
+PYTHON_VERSION = 3.8
 
 conda create --name $PROJECT_NAME --yes python=$PYTHON_VERSION
 conda activate $PROJECT_NAME
