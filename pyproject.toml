@@ -16,14 +16,14 @@ uvicorn = "^0.11"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7"
-black = { allow-prereleases = true, version = "^20.8b1" }
+black = { allow-prereleases = true, version = "^21.5b2" }
 flake8 = "^3.9"
 isort = "^5.8"
 jupyterlab = "^3.0"
 mypy = "^0"
 poetry = "^1.1"
 pre-commit = "^2.12"
-pre-commit-hooks = "^3.4"
+pre-commit-hooks = "^4.0"
 pytest = "^6.2"
 pytest-cov = "^2.11"
 

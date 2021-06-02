@@ -1,20 +1,20 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0  # Use the ref you want to point at
+    rev: v4.0.1  # Use the ref you want to point at
     hooks:
-      # basic checks
+      # endings
       - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix, lf]
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext, md]
 
-      # files check
+      # files
       - id: check-case-conflict
       - id: check-executables-have-shebangs
       - id: check-symlinks
       - id: destroyed-symlinks
       - id: fix-byte-order-marker
-      - id: mixed-line-ending
-        args: [--fix, lf]
 
       # git
       - id: check-added-large-files
@@ -34,7 +34,7 @@ repos:
       - id: name-tests-test
       - id: requirements-txt-fixer
 
-      # config files
+      # configs
       - id: check-json
       - id: pretty-format-json
       - id: check-toml
@@ -57,11 +57,11 @@ repos:
     hooks:
       - id: isort
   - repo: https://github.com/psf/black
-    rev: stable
+    rev: 21.5b2
     hooks:
       - id: black
   - repo: https://gitlab.com/PyCQA/flake8
-    rev: 3.9.1
+    rev: 3.9.2
     hooks:
       - id: flake8
   - repo: https://github.com/PyCQA/bandit
