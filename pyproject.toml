@@ -6,7 +6,7 @@ authors = ["yxtay <wyextay@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "~3.8"
-fastapi = "^0.61"
+fastapi = "^0.65"
 gunicorn = "^20.1"
 pydantic = { extras = ["dotenv"], version = "^1.8" }
 python-dotenv = "^0.14"
