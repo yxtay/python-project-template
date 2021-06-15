@@ -6,13 +6,13 @@ authors = ["yxtay <wyextay@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "~3.8"
-fastapi = "^0.61"
+fastapi = "^0.65"
 gunicorn = "^20.1"
 pydantic = { extras = ["dotenv"], version = "^1.8" }
 python-dotenv = "^0.14"
 python-json-logger = "^0.1"
-typer = "^0.3"
-uvicorn = "^0.11"
+typer = "*" # "^0.3"
+uvicorn = "^0.14"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7"
