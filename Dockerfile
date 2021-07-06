@@ -7,22 +7,23 @@ FROM python:$PYTHON_VERSION AS dev
 MAINTAINER wyextay@gmail.com
 
 # set up user
-ARG USER=app
+ARG USER=nonroot
 RUN useradd --create-home --no-log-init --system --user-group $USER
 USER $USER
 ARG HOME=/home/$USER
-WORKDIR $HOME
+WORKDIR $HOME/app
 
 # set up python
 ARG VIRTUAL_ENV=$HOME/.venv
 ENV PATH=$VIRTUAL_ENV/bin:$PATH \
     PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PIP_DEFAULT_TIMEOUT=60 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1
 RUN python -m venv $VIRTUAL_ENV && \
-    pip install --no-cache-dir --upgrade pip
+    pip install --upgrade pip
 
 # install dependencies
 COPY requirements.txt requirements.txt
@@ -31,6 +32,7 @@ RUN pip install -r requirements.txt && \
 
 # copy project files
 COPY Makefile Makefile
+COPY configs configs
 COPY src src
 
 EXPOSE 8000
@@ -48,15 +50,16 @@ RUN apt-get update && apt-get install --no-install-recommends --yes make && \
     rm -rf /var/lib/apt/lists/*
 
 # set up user
-ARG USER=app
+ARG USER=nonroot
 RUN useradd --create-home --no-log-init --system --user-group $USER
 USER $USER
 ARG HOME=/home/$USER
-WORKDIR $HOME
+WORKDIR $HOME/app
 
 ARG VIRTUAL_ENV=$HOME/.venv
 ENV PATH=$VIRTUAL_ENV/bin:$PATH \
     PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PIP_DEFAULT_TIMEOUT=60 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
