@@ -25,6 +25,7 @@ services:
       cache_from:
         - yxtay/python-project-template:dev
         - yxtay/python-project-template:latest
+        - yxtay/python-project-template:${IMAGE_TAG}
       target: prod
     command: /bin/bash
     env_file: .env
