@@ -1,3 +1,5 @@
+## options
+# based on https://tech.davis-hansson.com/p/make/
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 SHELL := bash
@@ -5,6 +7,8 @@ SHELL := bash
 .ONESHELL:
 .DEFAULT_GOAL := help
 .DELETE_ON_ERROR:
+
+## variables
 
 ENVIRONMENT ?= dev
 ARGS =
@@ -17,6 +21,9 @@ IMAGE_REPO = $(shell python -m src.config image_repo)
 IMAGE_NAME = $(IMAGE_HOST)/$(IMAGE_REPO)/$(APP_NAME)
 IMAGE_TAG ?= latest
 
+## formula
+
+# based on https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 .PHONY: help
 help:  ## print help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -85,45 +92,28 @@ run-web:  ## run python web
 .PHONY: run
 run: run-web  ## run main python app
 
-## docker
+## docker-compose
 
-.PHONY: docker-build
-docker-build: requirements.txt  ## build app image
-	docker pull $(IMAGE_NAME):dev || true
-	docker build . \
-		--build-arg ENVIRONMENT=$(ENVIRONMENT) \
-		--cache-from $(IMAGE_NAME):dev \
-		--tag $(IMAGE_NAME):dev \
-		--target dev
-	docker pull $(IMAGE_NAME):latest || true
-	docker build . \
-		--build-arg ENVIRONMENT=$(ENVIRONMENT) \
-		--cache-from $(IMAGE_NAME):dev \
-		--cache-from $(IMAGE_NAME):latest \
-		--tag $(IMAGE_NAME):$(IMAGE_TAG) \
-		--target prod
+.PHONY: dc-build
+dc-build: requirements.txt  ## build app image
+	IMAGE_TAG=$(IMAGE_TAG) docker-compose build
 
-.PHONY: docker-push
-docker-push:
-	docker push $(IMAGE_NAME):dev || true
-	docker push $(IMAGE_NAME):$(IMAGE_TAG)
+.PHONY: dc-push
+dc-push:
+	IMAGE_TAG=$(IMAGE_TAG) docker-compose push
 
-.PHONY: docker-run
-docker-run:  ## run app image
-	docker run --rm \
-	    --mount type=bind,source=$(shell pwd),target=/home/app \
-		-e ENVIRONMENT=$(ENVIRONMENT) \
-		-p 8000:8000 \
-		$(IMAGE_NAME):$(IMAGE_TAG) \
-		$(ARGS)
+.PHONY: dc-up
+dc-up:  ## run app image
+	docker-compose up web_dev
 
-.PHONY: docker-exec
-docker-exec:
-	docker exec -it \
-		$(shell docker ps -q  --filter ancestor=$(IMAGE_NAME):$(IMAGE_TAG)) \
-		/bin/bash
+.PHONY: dc-exec
+dc-exec:
+	docker-compose exec web_dev /bin/bash
 
-.PHONY: docker-stop
-docker-stop:
-	docker stop \
-		$(shell docker ps -q  --filter ancestor=$(IMAGE_NAME):$(IMAGE_TAG))
+.PHONY: dc-stop
+dc-stop:
+	docker-compose stop
+
+.PHONY: dc-down
+dc-down:
+	docker-compose down

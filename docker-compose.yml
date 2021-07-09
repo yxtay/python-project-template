@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  web_dev:
+    image: yxtay/python-project-template:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+      cache_from:
+        - yxtay/python-project-template:dev
+      target: dev
+    volumes:
+      - .:/home/app/work
+    ports:
+      - "8000:8000"
+    env_file: .env
+  web:
+    image: yxtay/python-project-template:${IMAGE_TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+      cache_from:
+        - yxtay/python-project-template:dev
+        - yxtay/python-project-template:latest
+        - yxtay/python-project-template:${IMAGE_TAG}
+      target: prod
+    command: /bin/bash
+    env_file: .env
