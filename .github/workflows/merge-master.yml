@@ -30,14 +30,14 @@ jobs:
             ${{ runner.os }}-pip-
             ${{ runner.os }}
 
-      - name: Run CI
-        run: make run-ci
-
       - name: Create env file
         run: |
           touch .env
           echo ENVIRONMENT=ci >> .env
           cat .env
+
+      - name: Run CI
+        run: make run-ci
 
       - name: Docker login
         run: echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USER} --password-stdin
