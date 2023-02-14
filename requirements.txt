@@ -6,7 +6,7 @@ h11==0.12.0; python_version >= "3.6"
 pydantic==1.8.2; python_full_version >= "3.6.1"
 python-dotenv==0.14.0
 python-json-logger==0.1.11; python_version >= "2.7"
-starlette==0.14.2; python_version >= "3.6"
+starlette==0.25.0; python_version >= "3.6"
 typer==0.3.2; python_version >= "3.6"
 typing-extensions==3.10.0.0; python_full_version >= "3.6.1" and python_version >= "3.6"
 uvicorn==0.14.0
