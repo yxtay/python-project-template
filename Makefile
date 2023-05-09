@@ -51,7 +51,7 @@ requirements.txt: poetry.lock
 	poetry export --format requirements.txt --output requirements.txt --without-hashes
 
 requirements-dev.txt: poetry.lock
-	poetry export --dev --format requirements.txt --output requirements-dev.txt --without-hashes
+	poetry export --with dev --format requirements.txt --output requirements-dev.txt --without-hashes
 
 ## checks
 
@@ -96,24 +96,24 @@ run: run-web  ## run main python app
 
 .PHONY: dc-build
 dc-build: requirements.txt  ## build app image
-	IMAGE_TAG=$(IMAGE_TAG) docker-compose build
+	IMAGE_TAG=$(IMAGE_TAG) DOCKER_BUILDKIT=1 docker compose build
 
 .PHONY: dc-push
 dc-push:
-	IMAGE_TAG=$(IMAGE_TAG) docker-compose push
+	IMAGE_TAG=$(IMAGE_TAG) docker compose push
 
 .PHONY: dc-up
 dc-up:  ## run app image
-	docker-compose up web_dev
+	docker compose up web_dev
 
 .PHONY: dc-exec
 dc-exec:
-	docker-compose exec web_dev /bin/bash
+	docker compose exec web_dev /bin/bash
 
 .PHONY: dc-stop
 dc-stop:
-	docker-compose stop
+	docker compose stop
 
 .PHONY: dc-down
 dc-down:
-	docker-compose down
+	docker compose down

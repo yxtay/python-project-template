@@ -6,12 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        ENVIRONMENT: ${ENVIRONMENT}
+        BUILDKIT_INLINE_CACHE: 1
+        ENVIRONMENT: ${ENVIRONMENT:-dev}
       cache_from:
         - yxtay/python-project-template:dev
       target: dev
     volumes:
-      - .:/home/app/work
+      - .:/home/app/app
     ports:
       - "8000:8000"
     env_file: .env
@@ -21,11 +22,13 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        ENVIRONMENT: ${ENVIRONMENT}
+        BUILDKIT_INLINE_CACHE: 1
+        ENVIRONMENT: ${ENVIRONMENT:-dev}
       cache_from:
         - yxtay/python-project-template:dev
         - yxtay/python-project-template:latest
         - yxtay/python-project-template:${IMAGE_TAG}
       target: prod
-    command: /bin/bash
+    ports:
+      - "8000:8000"
     env_file: .env

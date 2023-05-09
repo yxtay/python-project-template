@@ -5,27 +5,26 @@ description = ""
 authors = ["yxtay <wyextay@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "~3.8"
-fastapi = "^0.65"
-gunicorn = "^20.1"
-pydantic = { extras = ["dotenv"], version = "^1.8" }
-python-dotenv = "^0.14"
-python-json-logger = "^0.1"
-typer = "*" # "^0.3"
-uvicorn = "^0.14"
+python = "^3.11"
+fastapi = "*"
+gunicorn = "*"
+pydantic = { extras = ["dotenv"], version = "*" }
+python-dotenv = "*"
+python-json-logger = "*"
+typer = "*"
+uvicorn = "*"
 
 [tool.poetry.dev-dependencies]
-bandit = "^1.7"
-black = { allow-prereleases = true, version = "^21.5b2" }
-flake8 = "^3.9"
-isort = "^5.8"
-jupyterlab = "^3.0"
-mypy = "^0"
-poetry = "^1.1"
-pre-commit = "^2.12"
-pre-commit-hooks = "^4.0"
-pytest = "^6.2"
-pytest-cov = "^2.11"
+bandit = "*"
+black = { allow-prereleases = true, version = "*" }
+flake8 = "*"
+isort = "*"
+mypy = "*"
+poetry = "^1.4.2"
+pre-commit = "*"
+pre-commit-hooks = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [tool.black]
 line-length = 88

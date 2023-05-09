@@ -1,4 +1,5 @@
-ARG PYTHON_VERSION=3.8
+# syntax=docker/dockerfile:1
+ARG PYTHON_VERSION=3.11
 
 ##
 # dev
@@ -7,38 +8,38 @@ FROM python:${PYTHON_VERSION} AS dev
 LABEL maintainer="wyextay@gmail.com"
 
 # set up user
-ARG USER=nonroot
-RUN useradd --create-home --no-log-init --system --user-group ${USER}
+ARG USER=app
+ARG GROUP=${USER}
+ARG UID=1000
+ARG GID=${UID}
+ARG WORKDIR=/home/${USER}/app
+RUN groupadd --gid ${GID} ${GROUP} \
+    && useradd --gid ${GID} --uid ${UID} ${USER}
 USER ${USER}
-ARG HOME=/home/${USER}
-WORKDIR ${HOME}/app
+WORKDIR ${WORKDIR}
 
 # set up python
-ARG VIRTUAL_ENV=${HOME}/.venv
+ARG VIRTUAL_ENV=/home/${USER}/.venv
 ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
-    PYTHONDONTWRITEBYTECODE=1 \
     PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1 \
-    PIP_DEFAULT_TIMEOUT=60 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_NO_CACHE_DIR=1
-RUN python -m venv ${VIRTUAL_ENV} && \
-    pip install --upgrade pip
+    PYTHONUNBUFFERED=1
+RUN python -m venv ${VIRTUAL_ENV}
 
 # install dependencies
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt && \
-    python --version && pip list
+RUN --mount=type=cache,target=/root/.cache \
+    python -m pip install --no-compile -r requirements.txt \
+    && python --version \
+    && pip list
 
 # copy project files
-COPY Makefile Makefile
 COPY configs configs
 COPY src src
 
 EXPOSE 8000
 ARG ENVIRONMENT=dev
 ENV ENVIRONMENT ${ENVIRONMENT}
-CMD ["make", "run"]
+CMD ["gunicorn", "src.web:app", "-c", "src/gunicorn_conf.py"]
 
 ##
 # prod
@@ -46,28 +47,28 @@ CMD ["make", "run"]
 FROM python:${PYTHON_VERSION}-slim AS prod
 LABEL maintainer="wyextay@gmail.com"
 
-RUN apt-get update && apt-get install --no-install-recommends --yes make && \
-    rm -rf /var/lib/apt/lists/*
-
 # set up user
-ARG USER=nonroot
-RUN useradd --create-home --no-log-init --system --user-group ${USER}
+ARG USER=app
+ARG GROUP=${USER}
+ARG UID=1000
+ARG GID=${UID}
+ARG WORKDIR=/home/${USER}/app
+RUN groupadd --gid ${GID} ${GROUP} \
+    && useradd --gid ${GID} --uid ${UID} ${USER}
 USER ${USER}
-ARG HOME=/home/${USER}
-WORKDIR ${HOME}/app
+WORKDIR ${WORKDIR}
 
-ARG VIRTUAL_ENV=${HOME}/.venv
+# set up python
+ARG VIRTUAL_ENV=/home/${USER}/.venv
 ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
-    PYTHONDONTWRITEBYTECODE=1 \
     PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1 \
-    PIP_DEFAULT_TIMEOUT=60 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_NO_CACHE_DIR=1
-COPY --from=dev --chown=${USER}:${USER} ${HOME} ${HOME}
+    PYTHONUNBUFFERED=1
+COPY --from=dev ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 RUN python --version && pip list
 
-EXPOSE 8000
+COPY --from=dev ${WORKDIR} ${WORKDIR}
+
 ARG ENVIRONMENT=prod
 ENV ENVIRONMENT=${ENVIRONMENT}
-CMD ["make", "run"]
+EXPOSE 8000
+CMD ["gunicorn", "src.web:app", "-c", "src/gunicorn_conf.py"]
