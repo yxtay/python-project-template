@@ -27,7 +27,7 @@ COPY requirements.txt requirements.txt
 RUN --mount=type=cache,target=${HOME}/.cache \
     python -m pip install --no-compile -r requirements.txt \
     && python --version \
-    && pip list
+    && python -m pip list
 
 # copy project files
 COPY configs configs
@@ -58,7 +58,6 @@ ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1
 COPY --from=dev ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-RUN python --version && pip list
 
 COPY --from=dev ${HOME}/app ${HOME}/app
 
