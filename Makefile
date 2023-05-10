@@ -96,7 +96,7 @@ run: run-web  ## run main python app
 
 .PHONY: dc-build
 dc-build: requirements.txt  ## build app image
-	IMAGE_TAG=$(IMAGE_TAG) DOCKER_BUILDKIT=1 docker compose build
+	IMAGE_TAG=$(IMAGE_TAG) docker compose build
 
 .PHONY: dc-push
 dc-push:
