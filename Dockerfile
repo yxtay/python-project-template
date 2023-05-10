@@ -11,8 +11,7 @@ LABEL maintainer="wyextay@gmail.com"
 ARG USER=user
 ARG UID=1000
 ARG HOME=/home/${USER}
-RUN groupadd --gid ${UID} ${USER} \
-    && useradd --gid ${UID} --uid ${UID} ${USER}
+RUN useradd --uid ${UID} --user-group ${USER}
 USER ${USER}
 WORKDIR ${HOME}/app
 
@@ -49,8 +48,7 @@ LABEL maintainer="wyextay@gmail.com"
 ARG USER=user
 ARG UID=1000
 ARG HOME=/home/${USER}
-RUN groupadd --gid ${UID} ${USER} \
-    && useradd --gid ${UID} --uid ${UID} ${USER}
+RUN useradd --uid ${UID} --user-group ${USER}
 USER ${USER}
 WORKDIR ${HOME}/app
 
