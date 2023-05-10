@@ -8,18 +8,16 @@ FROM python:${PYTHON_VERSION} AS dev
 LABEL maintainer="wyextay@gmail.com"
 
 # set up user
-ARG USER=app
-ARG GROUP=${USER}
+ARG USER=user
 ARG UID=1000
-ARG GID=${UID}
-ARG WORKDIR=/home/${USER}/app
-RUN groupadd --gid ${GID} ${GROUP} \
-    && useradd --gid ${GID} --uid ${UID} ${USER}
+ARG HOME=/home/${USER}
+RUN groupadd --gid ${UID} ${USER} \
+    && useradd --gid ${UID} --uid ${UID} ${USER}
 USER ${USER}
-WORKDIR ${WORKDIR}
+WORKDIR ${HOME}/app
 
 # set up python
-ARG VIRTUAL_ENV=/home/${USER}/.venv
+ARG VIRTUAL_ENV=${HOME}/.venv
 ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1
@@ -27,7 +25,7 @@ RUN python -m venv ${VIRTUAL_ENV}
 
 # install dependencies
 COPY requirements.txt requirements.txt
-RUN --mount=type=cache,target=/root/.cache \
+RUN --mount=type=cache,target=${HOME}/.cache \
     python -m pip install --no-compile -r requirements.txt \
     && python --version \
     && pip list
@@ -48,25 +46,23 @@ FROM python:${PYTHON_VERSION}-slim AS prod
 LABEL maintainer="wyextay@gmail.com"
 
 # set up user
-ARG USER=app
-ARG GROUP=${USER}
+ARG USER=user
 ARG UID=1000
-ARG GID=${UID}
-ARG WORKDIR=/home/${USER}/app
-RUN groupadd --gid ${GID} ${GROUP} \
-    && useradd --gid ${GID} --uid ${UID} ${USER}
+ARG HOME=/home/${USER}
+RUN groupadd --gid ${UID} ${USER} \
+    && useradd --gid ${UID} --uid ${UID} ${USER}
 USER ${USER}
-WORKDIR ${WORKDIR}
+WORKDIR ${HOME}/app
 
 # set up python
-ARG VIRTUAL_ENV=/home/${USER}/.venv
+ARG VIRTUAL_ENV=${HOME}/.venv
 ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1
 COPY --from=dev ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 RUN python --version && pip list
 
-COPY --from=dev ${WORKDIR} ${WORKDIR}
+COPY --from=dev ${HOME}/app ${HOME}/app
 
 ARG ENVIRONMENT=prod
 ENV ENVIRONMENT=${ENVIRONMENT}
