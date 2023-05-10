@@ -64,7 +64,7 @@ RUN python --version && pip list
 
 COPY --from=dev ${HOME}/app ${HOME}/app
 
+EXPOSE 8000
 ARG ENVIRONMENT=prod
 ENV ENVIRONMENT=${ENVIRONMENT}
-EXPOSE 8000
 CMD ["gunicorn", "src.web:app", "-c", "src/gunicorn_conf.py"]
