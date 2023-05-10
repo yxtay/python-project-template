@@ -5,7 +5,7 @@ from logging.handlers import QueueHandler, QueueListener, RotatingFileHandler
 from queue import Queue
 from typing import Any, Dict, List
 
-from pythonjsonlogger.jsonlogger import JsonFormatter  # type: ignore
+from pythonjsonlogger.jsonlogger import JsonFormatter
 
 # init root logger with null handler
 logging.basicConfig(handlers=[logging.NullHandler()])
@@ -20,7 +20,7 @@ atexit.register(log_qlistener.stop)
 class StackdriverFormatter(JsonFormatter):
     def process_log_record(self, log_record: Dict[str, Any]) -> Dict[str, Any]:
         log_record["severity"] = log_record["levelname"]
-        return super().process_log_record(log_record)
+        return super().process_log_record(log_record)  # type: ignore
 
 
 def _get_log_formatter() -> StackdriverFormatter:
@@ -42,7 +42,7 @@ def _get_log_formatter() -> StackdriverFormatter:
     date_format = "%Y-%m-%dT%H:%M:%S"
     log_formatter = StackdriverFormatter(
         fmt=log_format, datefmt=date_format, timestamp=True
-    )
+    )  # type: ignore
     return log_formatter
 
 
@@ -51,7 +51,7 @@ def _get_file_handler(
 ) -> RotatingFileHandler:
     file_handler = RotatingFileHandler(
         log_path,
-        maxBytes=2 ** 20,  # 1 MB
+        maxBytes=2**20,  # 1 MB
         backupCount=10,  # 10 backups
         encoding="utf8",
         delay=True,

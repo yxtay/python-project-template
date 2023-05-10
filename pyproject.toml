@@ -2,7 +2,10 @@
 name = "python-project-template"
 version = "0.1.0"
 description = ""
-authors = ["yxtay <wyextay@gmail.com>"]
+authors = ["YuXuan Tay <wyextay@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "python_project_template"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -14,9 +17,10 @@ python-json-logger = "*"
 typer = "*"
 uvicorn = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 bandit = "*"
 black = { allow-prereleases = true, version = "*" }
+fastapi = {extras = ["all"], version = "*"}
 flake8 = "*"
 isort = "*"
 mypy = "*"
@@ -28,7 +32,7 @@ pytest-cov = "*"
 
 [tool.black]
 line-length = 88
-target-version = ["py38"]
+target-version = ["py311"]
 include = ".pyi?$"
 exclude = """
 (
@@ -63,5 +67,5 @@ addopts = """
 """
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

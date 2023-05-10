@@ -38,7 +38,7 @@ def get_config(
     # environment config
     config = dict(parser[environment].items())
     config.update(kwargs)
-    app_config = AppConfig(**config)
+    app_config = AppConfig(**config)  # type: ignore
     return app_config
 
 
