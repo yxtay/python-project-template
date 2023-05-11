@@ -34,6 +34,7 @@ help:  ## print help message
 deps-install:  ## install dependencies
 	python -m pip install poetry
 	python -m poetry install --no-root
+	python -m pre_commit install
 
 .PHONY: deps-install-ci
 deps-install-ci:
@@ -46,6 +47,7 @@ deps-install-ci:
 deps-update:
 	python -m poetry update
 	python -m poetry export --format requirements.txt --output requirements.txt --without-hashes
+	python -m pre_commit autoupdate
 
 requirements.txt: poetry.lock
 	python -m poetry export --format requirements.txt --output requirements.txt --without-hashes
