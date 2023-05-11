@@ -21,7 +21,6 @@ uvicorn = "*"
 bandit = "*"
 black = { allow-prereleases = true, version = "*" }
 fastapi = {extras = ["all"], version = "*"}
-flake8 = "*"
 isort = "*"
 mypy = "*"
 poetry = "^1.4.2"
@@ -29,6 +28,7 @@ pre-commit = "*"
 pre-commit-hooks = "*"
 pytest = "*"
 pytest-cov = "*"
+ruff = "*"
 
 [tool.black]
 line-length = 88
