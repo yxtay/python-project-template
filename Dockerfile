@@ -12,24 +12,24 @@ ARG USER=user
 ARG UID=1000
 ARG HOME=/home/${USER}
 RUN useradd --uid ${UID} --user-group ${USER}
-USER ${USER}
-WORKDIR ${HOME}/app
 
 # set up python
 ARG VIRTUAL_ENV=${HOME}/.venv
-ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
+ENV PATH=${VIRTUAL_ENV}/bin:${HOME}/.local/bin:${PATH} \
     PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1
-RUN python -m venv ${VIRTUAL_ENV}
-
-# install dependencies
-COPY requirements.txt requirements.txt
+    PYTHONUNBUFFERED=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1
+WORKDIR ${HOME}
+COPY pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=${HOME}/.cache \
-    python -m pip install --no-compile -r requirements.txt \
+    pip install --no-compile poetry \
+    && python -m poetry install --only main --no-root \
     && python --version \
-    && python -m pip list
+    && pip list
 
-# copy project files
+# set up project
+USER ${USER}
+WORKDIR ${HOME}/app
 COPY configs configs
 COPY src src
 
@@ -49,8 +49,6 @@ ARG USER=user
 ARG UID=1000
 ARG HOME=/home/${USER}
 RUN useradd --uid ${UID} --user-group ${USER}
-USER ${USER}
-WORKDIR ${HOME}/app
 
 # set up python
 ARG VIRTUAL_ENV=${HOME}/.venv
@@ -59,6 +57,9 @@ ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
     PYTHONUNBUFFERED=1
 COPY --from=dev ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
+# set up project
+USER ${USER}
+WORKDIR ${HOME}/app
 COPY --from=dev ${HOME}/app ${HOME}/app
 
 EXPOSE 8000
