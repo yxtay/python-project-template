@@ -11,15 +11,13 @@ LABEL maintainer="wyextay@gmail.com"
 ARG USER=user
 ARG UID=1000
 ARG HOME=/home/${USER}
-RUN useradd --uid ${UID} --user-group ${USER}
+RUN useradd --create-home --uid ${UID} --user-group ${USER}
 
 # set up environment
 ARG VIRTUAL_ENV=${HOME}/.venv
 ENV PATH=${VIRTUAL_ENV}/bin:${HOME}/.local/bin:${PATH} \
     PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1
-WORKDIR ${HOME}
+    PYTHONUNBUFFERED=1
 
 ##
 # dev
@@ -34,9 +32,11 @@ RUN target=/var/cache/apt \
     && rm -rf /var/lib/apt/lists/*
 
 # set up python
+WORKDIR ${HOME}
 COPY pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
     curl -sSL https://install.python-poetry.org | python \
+    && poetry config virtualenvs.in-project true \
     && poetry install --only main --no-root \
     && python --version \
     && poetry show
