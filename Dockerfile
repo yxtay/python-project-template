@@ -2,9 +2,9 @@
 ARG PYTHON_VERSION=3.11
 
 ##
-# dev
+# base
 ##
-FROM python:${PYTHON_VERSION} AS dev
+FROM python:${PYTHON_VERSION}-slim AS base
 LABEL maintainer="wyextay@gmail.com"
 
 # set up user
@@ -13,19 +13,33 @@ ARG UID=1000
 ARG HOME=/home/${USER}
 RUN useradd --uid ${UID} --user-group ${USER}
 
-# set up python
+# set up environment
 ARG VIRTUAL_ENV=${HOME}/.venv
 ENV PATH=${VIRTUAL_ENV}/bin:${HOME}/.local/bin:${PATH} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1
 WORKDIR ${HOME}
+
+##
+# dev
+##
+FROM base AS dev
+
+RUN target=/var/cache/apt \
+    apt-get update \
+    && apt-get install --no-install-recommends -y \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# set up python
 COPY pyproject.toml poetry.lock ./
-RUN --mount=type=cache,target=${HOME}/.cache \
-    pip install --no-compile poetry \
-    && python -m poetry install --only main --no-root \
+RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
+    curl -sSL https://install.python-poetry.org | python \
+    && poetry install --only main --no-root \
     && python --version \
-    && pip list
+    && poetry show
 
 # set up project
 USER ${USER}
@@ -41,25 +55,12 @@ CMD ["gunicorn", "src.web:app", "-c", "src/gunicorn_conf.py"]
 ##
 # prod
 ##
-FROM python:${PYTHON_VERSION}-slim AS prod
-LABEL maintainer="wyextay@gmail.com"
-
-# set up user
-ARG USER=user
-ARG UID=1000
-ARG HOME=/home/${USER}
-RUN useradd --uid ${UID} --user-group ${USER}
-
-# set up python
-ARG VIRTUAL_ENV=${HOME}/.venv
-ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
-    PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1
-COPY --from=dev ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+FROM base AS prod
 
 # set up project
 USER ${USER}
 WORKDIR ${HOME}/app
+COPY --from=dev --chown=${USER}:${USER} ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --from=dev ${HOME}/app ${HOME}/app
 
 EXPOSE 8000
