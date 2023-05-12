@@ -25,11 +25,13 @@ jobs:
       - name: Poetry cache
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pypoetry
+          path: |
+            ~/.cache/pip
+            ~/.cache/pypoetry
           key: ${{ runner.os }}-pypoetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
+            ${{ runner.os }}-pypoetry-${{ hashFiles('**/poetry.lock') }}
             ${{ runner.os }}-pypoetry-
-            ${{ runner.os }}
 
       - name: Create env file
         run: |
