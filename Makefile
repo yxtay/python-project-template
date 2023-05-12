@@ -42,6 +42,7 @@ deps-install-ci:
 	poetry config virtualenvs.in-project true
 	poetry install --no-root
 	poetry show
+	source .venv/bin/activate
 
 .PHONY: deps-update
 deps-update:
