@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{include = "python_project_template"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 fastapi = "*"
 gunicorn = "*"
 pydantic = { extras = ["dotenv"], version = "*" }
@@ -32,7 +32,7 @@ ruff = "*"
 
 [tool.black]
 line-length = 88
-target-version = ["py311"]
+target-version = ["py30"]
 include = ".pyi?$"
 exclude = """
 (
