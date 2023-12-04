@@ -9,7 +9,7 @@ from pydantic_settings import BaseSettings
 from src.logger import configure_log_listener, get_logger
 
 
-class AppConfig(BaseSettings):  # type: ignore [valid-type, misc]
+class AppConfig(BaseSettings):
     app_name: str = ""
     environment: str = "dev"
 
@@ -39,13 +39,13 @@ def get_config(
     # environment config
     config = dict(parser[environment].items())
     config.update(kwargs)
-    return AppConfig(**config)
+    return AppConfig(**config)  # type: ignore[arg-type]
 
 
 config = get_config()
 
 # config logger
-configure_log_listener(config.log_console, config.log_file)
+configure_log_listener(console=config.log_console, log_path=config.log_file)
 logger = get_logger(config.app_name)
 logger.debug("config", extra={"config": config.dict()})
 
