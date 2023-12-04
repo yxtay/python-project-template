@@ -38,7 +38,7 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
 
 # set up python
 WORKDIR ${HOME}/app
-COPY --link --chown=${USER}:${USER} pyproject.toml poetry.lock ./
+COPY --chown=${USER}:${USER} pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=${HOME}/.cache/pip \
     --mount=type=cache,target=${HOME}/.cache/pypoetry \
     pip install poetry \
@@ -50,8 +50,8 @@ RUN --mount=type=cache,target=${HOME}/.cache/pip \
 
 # set up project
 USER ${USER}
-COPY --link --chown=${USER}:${USER} configs configs
-COPY --link --chown=${USER}:${USER} src src
+COPY --chown=${USER}:${USER} configs configs
+COPY --chown=${USER}:${USER} src src
 
 EXPOSE 8000
 ARG ENVIRONMENT=dev
@@ -70,8 +70,8 @@ RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
     && poetry show
 
 USER ${USER}
-COPY --link --chown=${USER}:${USER} tests tests
-COPY --link --chown=${USER}:${USER} Makefile Makefile
+COPY --chown=${USER}:${USER} tests tests
+COPY --chown=${USER}:${USER} Makefile Makefile
 
 CMD ["make", "lint", "test"]
 
@@ -83,8 +83,8 @@ FROM base AS prod
 # set up project
 USER ${USER}
 WORKDIR ${HOME}/app
-COPY --from=dev --link --chown=${USER}:${USER} ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --from=dev --link --chown=${USER}:${USER} ${HOME}/app ${HOME}/app
+COPY --from=dev --chown=${USER}:${USER} ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY --from=dev --chown=${USER}:${USER} ${HOME}/app ${HOME}/app
 
 EXPOSE 8000
 ARG ENVIRONMENT=prod
