@@ -32,9 +32,8 @@ help:  ## print help message
 
 .PHONY: deps-install
 deps-install:  ## install dependencies
-	python -m pip install poetry
-	python -m poetry install --no-root
-	python -m pre_commit install
+	poetry install --no-root
+	python -m pre_commit install --install-hooks
 
 .PHONY: deps-install-ci
 deps-install-ci:
@@ -45,15 +44,15 @@ deps-install-ci:
 
 .PHONY: deps-update
 deps-update:
-	python -m poetry update
-	python -m poetry export --format requirements.txt --output requirements.txt --without-hashes
+	poetry update
+	poetry export --format requirements.txt --output requirements.txt --without-hashes
 	python -m pre_commit autoupdate
 
 requirements.txt: poetry.lock
-	python -m poetry export --format requirements.txt --output requirements.txt --without-hashes
+	poetry export --format requirements.txt --output requirements.txt --without-hashes
 
 requirements-dev.txt: poetry.lock
-	python -m poetry export --with dev --format requirements.txt --output requirements-dev.txt --without-hashes
+	poetry export --with dev --format requirements.txt --output requirements-dev.txt --without-hashes
 
 ## checks
 
@@ -68,7 +67,6 @@ lint:
 	python -m ruff check .
 	python -m isort . --check --diff
 	python -m black $(SOURCE_DIR) $(TEST_DIR) --diff
-	python -m bandit -r $(SOURCE_DIR) -lll -iii
 	python -m mypy $(SOURCE_DIR)
 
 .PHONY: test

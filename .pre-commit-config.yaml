@@ -1,73 +1,68 @@
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0  # Use the ref you want to point at
-    hooks:
-      # endings
-      - id: end-of-file-fixer
-      - id: mixed-line-ending
-        args: [--fix, lf]
-      - id: trailing-whitespace
-        args: [--markdown-linebreak-ext, md]
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.5.0 # Use the ref you want to point at
+      hooks:
+          # endings
+          - id: end-of-file-fixer
+          - id: mixed-line-ending
+            args: [--fix, lf]
+          - id: trailing-whitespace
+            args: [--markdown-linebreak-ext, md]
 
-      # files
-      - id: check-case-conflict
-      - id: check-executables-have-shebangs
-      - id: check-symlinks
-      - id: destroyed-symlinks
-      - id: fix-byte-order-marker
+          # files
+          - id: check-case-conflict
+          - id: check-executables-have-shebangs
+          - id: check-symlinks
+          - id: destroyed-symlinks
+          - id: fix-byte-order-marker
 
-      # git
-      - id: check-added-large-files
-      - id: check-merge-conflict
-      - id: check-vcs-permalinks
-      - id: no-commit-to-branch
-      - id: forbid-new-submodules
+          # git
+          - id: check-added-large-files
+          - id: check-merge-conflict
+          - id: check-vcs-permalinks
+          - id: no-commit-to-branch
+          - id: forbid-new-submodules
 
-      # python
-      - id: check-ast
-      - id: check-builtin-literals
-      - id: check-docstring-first
-      - id: debug-statements
-      # - id: double-quote-string-fixer  # conflicts with black
-      - id: fix-encoding-pragma
-        args: [--remove]
-      - id: name-tests-test
-      - id: requirements-txt-fixer
+          # python
+          - id: check-ast
+          - id: check-builtin-literals
+          - id: check-docstring-first
+          - id: debug-statements
+          # - id: double-quote-string-fixer  # conflicts with black
+          - id: fix-encoding-pragma
+            args: [--remove]
+          - id: name-tests-test
+          - id: requirements-txt-fixer
 
-      # configs
-      - id: check-json
-      - id: pretty-format-json
-      - id: check-toml
-      - id: check-xml
-      - id: check-yaml
-      # - id: sort-simple-yaml  # must specify files to check
-      #   files: "^$"
-      #   args: [--filenames, ""]
-      # - id: file-contents-sorter  # must specify files to check
-      #   files: "^$"
-      #   args: [--filenames, ""]
+          # configs
+          - id: check-json
+          - id: pretty-format-json
+          - id: check-toml
+          - id: check-xml
+          - id: check-yaml
+          # - id: sort-simple-yaml  # must specify files to check
+          #   files: "^$"
+          #   args: [--filenames, ""]
+          # - id: file-contents-sorter  # must specify files to check
+          #   files: "^$"
+          #   args: [--filenames, ""]
 
-      # security
-      - id: detect-aws-credentials
-        args: [--allow-missing-credentials]
-      - id: detect-private-key
+          # security
+          - id: detect-aws-credentials
+            args: [--allow-missing-credentials]
+          - id: detect-private-key
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    # Ruff version.
-    rev: v0.0.265
-    hooks:
-      - id: ruff
-        args: [ --fix, --exit-non-zero-on-fix ]
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.12.0
-    hooks:
-      - id: isort
-  - repo: https://github.com/psf/black
-    rev: 23.3.0
-    hooks:
-      - id: black
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.5
-    hooks:
-      - id: bandit
-        args: [-lll, -iii]
+    - repo: https://github.com/charliermarsh/ruff-pre-commit
+      # Ruff version.
+      rev: v0.1.6
+      hooks:
+          - id: ruff
+            args: [--fix, --exit-non-zero-on-fix]
+    - repo: https://github.com/PyCQA/isort
+      rev: 5.12.0
+      hooks:
+          - id: isort
+    - repo: https://github.com/psf/black
+      rev: 23.11.0
+      hooks:
+          - id: black

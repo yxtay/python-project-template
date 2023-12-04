@@ -5,7 +5,6 @@ description = ""
 authors = ["YuXuan Tay <wyextay@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "python_project_template"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -16,40 +15,21 @@ python-dotenv = "*"
 python-json-logger = "*"
 typer = "*"
 uvicorn = "*"
+pydantic-settings = "*"
 
 [tool.poetry.group.dev.dependencies]
-bandit = "*"
 black = { allow-prereleases = true, version = "*" }
-fastapi = {extras = ["all"], version = "*"}
+fastapi = { extras = ["all"], version = "*" }
 isort = "*"
 mypy = "*"
-poetry = "^1.4.2"
 pre-commit = "*"
-pre-commit-hooks = "*"
 pytest = "*"
 pytest-cov = "*"
 ruff = "*"
 
 [tool.black]
 line-length = 88
-target-version = ["py310"]
-include = ".pyi?$"
-exclude = """
-(
-  /(
-      .eggs         # exclude a few common directories in the
-    | .git          # root of the project
-    | .hg
-    | .mypy_cache
-    | .tox
-    | .venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-)
-"""
+target-version = ["py311"]
 
 [tool.isort]
 # compatible with psf/black
@@ -65,6 +45,23 @@ addopts = """
     -v
     --strict-markers
 """
+
+[tool.ruff]
+fix = true
+select = ["ALL"]
+ignore = [
+    "D",      # pydocstyle
+    "I",      # isort
+    "ERA",    # eradicate
+    "B008",   # function-call-in-default-argument
+    "E501",   # line-too-long
+    "COM812", # missing-trailing-comma
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = [
+    "S101", # assert
+]
 
 [build-system]
 requires = ["poetry-core"]

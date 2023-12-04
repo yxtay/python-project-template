@@ -5,8 +5,7 @@ app = typer.Typer()
 
 @app.command()
 def main(name: str = typer.Argument("World")) -> None:
-    """
-    Print hello message
+    """Print hello message.
 
     name - name to be greeted; default: "World"
     """

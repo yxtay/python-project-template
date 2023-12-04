@@ -15,7 +15,7 @@ RUN useradd --create-home --uid ${UID} --user-group ${USER}
 
 # set up environment
 ARG VIRTUAL_ENV=${HOME}/.venv
-ENV PATH=${VIRTUAL_ENV}/bin:${HOME}/.local/bin:${PATH} \
+ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1
 
@@ -24,28 +24,35 @@ ENV PATH=${VIRTUAL_ENV}/bin:${HOME}/.local/bin:${PATH} \
 ##
 FROM base AS dev
 
-RUN target=/var/cache/apt \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean && \
     apt-get update \
     && apt-get install --no-install-recommends -y \
-    build-essential \
-    curl \
+        build-essential \
+        curl \
     && rm -rf /var/lib/apt/lists/*
 
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_COMPILE=1 \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_CREATE=0
+
 # set up python
-WORKDIR ${HOME}
-COPY pyproject.toml poetry.lock ./
-RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
-    curl -sSL https://install.python-poetry.org | python \
-    && poetry config virtualenvs.in-project true \
+WORKDIR ${HOME}/app
+COPY --chown=${USER}:${USER} pyproject.toml poetry.lock ./
+RUN --mount=type=cache,target=${HOME}/.cache/pip \
+    --mount=type=cache,target=${HOME}/.cache/pypoetry \
+    pip install poetry \
+    && python -m venv ${VIRTUAL_ENV} \
     && poetry install --only main --no-root \
+    && chown -R ${USER}:${USER} ${HOME} \
     && python --version \
     && poetry show
 
 # set up project
 USER ${USER}
-WORKDIR ${HOME}/app
-COPY configs configs
-COPY src src
+COPY --chown=${USER}:${USER} configs configs
+COPY --chown=${USER}:${USER} src src
 
 EXPOSE 8000
 ARG ENVIRONMENT=dev
@@ -61,7 +68,7 @@ FROM base AS prod
 USER ${USER}
 WORKDIR ${HOME}/app
 COPY --from=dev --chown=${USER}:${USER} ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --from=dev ${HOME}/app ${HOME}/app
+COPY --from=dev --chown=${USER}:${USER} ${HOME}/app ${HOME}/app
 
 EXPOSE 8000
 ARG ENVIRONMENT=prod

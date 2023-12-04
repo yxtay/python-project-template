@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import atexit
 import logging
 import sys
 from logging.handlers import QueueHandler, QueueListener, RotatingFileHandler
 from queue import Queue
-from typing import Any, Dict, List
+from typing import Any
 
 from pythonjsonlogger.jsonlogger import JsonFormatter
 
@@ -18,36 +20,27 @@ atexit.register(log_qlistener.stop)
 
 
 class StackdriverFormatter(JsonFormatter):
-    def process_log_record(self, log_record: Dict[str, Any]) -> Dict[str, Any]:
+    def process_log_record(
+        self: StackdriverFormatter, log_record: dict[str, Any]
+    ) -> dict[str, Any]:
         log_record["severity"] = log_record["levelname"]
-        return super().process_log_record(log_record)  # type: ignore
+        return super().process_log_record(log_record)  # type: ignore [no-untyped-call]
 
 
 def _get_log_formatter() -> StackdriverFormatter:
     # formatter
-    log_format = " - ".join(
-        [
-            "%(asctime)s",
-            "%(levelname)s",
-            "%(name)s",
-            "%(processName)s",
-            "%(threadName)s",
-            "%(filename)s",
-            "%(module)s",
-            "%(lineno)d",
-            "%(funcName)s",
-            "%(message)s",
-        ]
-    )
+    log_format = "%(asctime)s - %(levelname)s - %(name)s - %(processName)s - %(threadName)s - %(filename)s - %(module)s - %(lineno)d - %(funcName)s - %(message)s"
     date_format = "%Y-%m-%dT%H:%M:%S"
-    log_formatter = StackdriverFormatter(
-        fmt=log_format, datefmt=date_format, timestamp=True
-    )  # type: ignore
-    return log_formatter
+    return StackdriverFormatter(
+        fmt=log_format,
+        datefmt=date_format,
+        timestamp=True,
+    )  # type: ignore[no-untyped-call]
 
 
 def _get_file_handler(
-    log_path: str = "main.log", log_level: int = logging.DEBUG
+    log_path: str = "main.log",
+    log_level: int = logging.DEBUG,
 ) -> RotatingFileHandler:
     file_handler = RotatingFileHandler(
         log_path,
@@ -69,24 +62,27 @@ def _get_stdout_handler(log_level: int = logging.INFO) -> logging.StreamHandler:
 
 
 def configure_log_listener(
-    console: bool = True, log_path: str = "main.log"
+    *,
+    console: bool = True,
+    log_path: str = "main.log",
 ) -> QueueListener:
-    """
-    Configure log queue listener to log into file and console.
+    """Configure log queue listener to log into file and console.
+
     Args:
+    ----
         console (bool): whether to log on console
         log_path (str): path of log file
     Returns:
-        log_qlistener (logging.handlers.QueueListener): configured log queue listener
+        log_qlistener (logging.handlers.QueueListener): configured log queue listener.
     """
-    global log_qlistener
+    global log_qlistener  # noqa: PLW0603
     try:
         atexit.unregister(log_qlistener.stop)
         log_qlistener.stop()
     except (AttributeError, NameError):
         pass
 
-    handlers: List[logging.Handler] = []
+    handlers: list[logging.Handler] = []
 
     # rotating file handler
     if log_path:
@@ -105,14 +101,15 @@ def configure_log_listener(
 
 
 def get_logger(name: str, log_level: int = logging.DEBUG) -> logging.Logger:
-    """
-    Simple logging wrapper that returns logger
+    """Simple logging wrapper that returns logger
     configured to log into file and console.
+
     Args:
+    ----
         name: name of logger
         log_level: log level
     Returns:
-        logger: configured logger
+        logger: configured logger.
     """
     logger = logging.getLogger(name)
     for log_handler in logger.handlers[:]:
