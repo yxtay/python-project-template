@@ -16,6 +16,8 @@ services:
         ports:
             - "8000:8000"
         env_file: .env
+        profiles:
+            - dev
     web_test:
         image: yxtay/python-project-template:test
         build:
@@ -29,6 +31,8 @@ services:
                 - yxtay/python-project-template:test
             target: test
         env_file: .env
+        profiles:
+            - test
     web:
         image: yxtay/python-project-template:${IMAGE_TAG}
         build:
@@ -45,3 +49,5 @@ services:
         ports:
             - "8000:8000"
         env_file: .env
+        profiles:
+            - prod
