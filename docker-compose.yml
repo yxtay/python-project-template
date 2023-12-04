@@ -26,6 +26,7 @@ services:
                 ENVIRONMENT: ${ENVIRONMENT:-dev}
             cache_from:
                 - yxtay/python-project-template:dev
+                - yxtay/python-project-template:test
             target: test
         env_file: .env
     web:
