@@ -29,10 +29,10 @@ services:
             cache_from:
                 - yxtay/python-project-template:dev
                 - yxtay/python-project-template:test
-            target: test
+            target: ci
         env_file: .env
         profiles:
-            - test
+            - ci
     web:
         image: yxtay/python-project-template:${IMAGE_TAG}
         build:
