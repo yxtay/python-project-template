@@ -32,7 +32,7 @@ help:  ## print help message
 
 .PHONY: deps-install
 deps-install:  ## install dependencies
-	poetry install --no-root
+	poetry install
 	python -m pre_commit install --install-hooks
 
 .PHONY: deps-install-ci
