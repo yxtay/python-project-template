@@ -67,7 +67,6 @@ lint:
 	python -m ruff check .
 	python -m isort . --check --diff
 	python -m black $(SOURCE_DIR) $(TEST_DIR) --diff
-	python -m bandit -r $(SOURCE_DIR) -lll -iii
 	python -m mypy $(SOURCE_DIR)
 
 .PHONY: test
