@@ -1,4 +1,4 @@
-import pytest  # type: ignore
+import pytest
 from typer.testing import CliRunner
 
 from src.task import app
@@ -7,7 +7,7 @@ runner = CliRunner()
 cases = ["World", "Name", "name", "NAME"]
 
 
-def test_base():
+def test_base() -> None:
     expected = "Hello World!"
 
     result = runner.invoke(app)
@@ -16,7 +16,7 @@ def test_base():
 
 
 @pytest.mark.parametrize("name", cases)
-def test_arg(name: str):
+def test_arg(name: str) -> None:
     expected = f"Hello {name}!"
 
     result = runner.invoke(app, [name])

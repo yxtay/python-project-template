@@ -10,10 +10,10 @@ reload = True  # default: False
 
 # logging
 loglevel = "info"  # default: "info"
-worker_tmp_dir = "/dev/shm"  # nosec, default: None
+worker_tmp_dir = "/dev/shm"  # nosec # noqa: S108 # default: None
 
 # server socket
-host = os.environ.get("HOST", "0.0.0.0")  # nosec
+host = os.environ.get("HOST", "0.0.0.0")  # nosec # noqa: S104
 port = os.environ.get("PORT", "8000")
 bind = [f"{host}:{port}"]  # default: ["127.0.0.1:8000"]
 
