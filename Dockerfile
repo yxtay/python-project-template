@@ -41,7 +41,8 @@ WORKDIR ${HOME}/app
 COPY --chown=${USER}:${USER} pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=${HOME}/.cache/pip \
     python -m pip install poetry \
-    && python -m venv ${VIRTUAL_ENV}
+    && python -m venv ${VIRTUAL_ENV} \
+    && chown -R ${USER}:${USER} ${HOME}
 RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
     poetry install --only main \
     && python --version \
