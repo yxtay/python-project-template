@@ -59,9 +59,9 @@ ENV ENVIRONMENT ${ENVIRONMENT}
 CMD ["gunicorn", "src.web:app", "-c", "src/gunicorn_conf.py"]
 
 ##
-# test
+# ci
 ##
-FROM dev AS test
+FROM dev AS ci
 
 USER root
 RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \

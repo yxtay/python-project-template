@@ -18,7 +18,7 @@ services:
         env_file: .env
         profiles:
             - dev
-    web_test:
+    web_ci:
         image: yxtay/python-project-template:test
         build:
             context: .

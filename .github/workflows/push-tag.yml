@@ -53,8 +53,8 @@ jobs:
             - name: Docker build
               run: make dc-build
 
-            - name: Docker test
-              run: make dc-test
+            - name: Docker CI
+              run: make dc-ci
 
             - name: Docker push
               run: make dc-push
