@@ -60,6 +60,23 @@ ENV ENVIRONMENT ${ENVIRONMENT}
 CMD ["gunicorn", "src.web:app", "-c", "src/gunicorn_conf.py"]
 
 ##
+# test
+##
+FROM dev AS test
+
+USER root
+RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
+    poetry install --no-root \
+    && chown -R ${USER}:${USER} ${HOME} \
+    && poetry show
+
+USER ${USER}
+COPY --chown=${USER}:${USER} tests tests
+COPY --chown=${USER}:${USER} Makefile Makefile
+
+CMD ["make", "lint", "test"]
+
+##
 # prod
 ##
 FROM base AS prod
