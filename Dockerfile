@@ -23,13 +23,13 @@ ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
 ##
 FROM base AS dev
 
-RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     rm -f /etc/apt/apt.conf.d/docker-clean && \
-    apt-get update \
-    && apt-get install --no-install-recommends -y \
+    apt-get update && \
+    apt-get install --no-install-recommends -y \
         build-essential \
-    curl
+        curl \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_COMPILE=1 \
@@ -40,13 +40,13 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
 WORKDIR ${HOME}/app
 COPY --chown=${USER}:${USER} pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=${HOME}/.cache/pip \
-    python -m pip install poetry \
-    && python -m venv ${VIRTUAL_ENV} \
-    && chown -R ${USER}:${USER} ${HOME}
+    python -m pip install poetry && \
+    python -m venv ${VIRTUAL_ENV} && \
+    chown -R ${USER}:${USER} ${HOME}
 RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
-    poetry install --only main \
-    && python --version \
-    && pip list
+    poetry install --only main && \
+    python --version && \
+    pip list
 
 # set up project
 USER ${USER}
@@ -65,8 +65,8 @@ FROM dev AS ci
 
 USER root
 RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
-    poetry install \
-    && pip list
+    poetry install && \
+    pip list
 
 USER ${USER}
 COPY --chown=${USER}:${USER} tests tests
