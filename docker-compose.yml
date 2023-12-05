@@ -19,7 +19,7 @@ services:
         profiles:
             - dev
     web_ci:
-        image: yxtay/python-project-template:test
+        image: yxtay/python-project-template:ci
         build:
             context: .
             dockerfile: Dockerfile
@@ -28,7 +28,7 @@ services:
                 ENVIRONMENT: ${ENVIRONMENT:-dev}
             cache_from:
                 - yxtay/python-project-template:dev
-                - yxtay/python-project-template:test
+                - yxtay/python-project-template:ci
             target: ci
         env_file: .env
         profiles:

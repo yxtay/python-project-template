@@ -38,11 +38,11 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
 
 # set up python
 WORKDIR ${HOME}/app
-COPY --chown=${USER}:${USER} pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=${HOME}/.cache/pip \
-    python -m pip install poetry && \
+    pip install poetry && \
     python -m venv ${VIRTUAL_ENV} && \
     chown -R ${USER}:${USER} ${HOME}
+COPY --chown=${USER}:${USER} pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
     poetry install --only main && \
     python --version && \
