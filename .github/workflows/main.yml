@@ -114,7 +114,7 @@ jobs:
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
                   load: true
 
-            - name: Run Docker CI
+            - name: Run CI image
               run: docker run --rm ${{ env.TEST_IMAGE_TAG }}
 
             - name: Docker metadata
