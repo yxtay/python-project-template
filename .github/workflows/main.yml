@@ -58,7 +58,7 @@ jobs:
               uses: docker/metadata-action@v5
               with:
                   images: |
-                      ${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}
+                      ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
                       ghcr.io/${{ github.repository }}
 
             - name: Login to Docker Hub
@@ -81,12 +81,12 @@ jobs:
               with:
                   target: dev
                   tags: |
-                      ${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:dev
+                      ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
                       ghcr.io/${{ github.repository }}:dev
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   cache-from: |
-                      type=registry,ref=${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:dev
+                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
                       type=registry,ref=ghcr.io/${{ github.repository }}:dev
                   cache-to: ${{ (github.event_name != 'pull_request') && 'type=inline' || '' }}
 
@@ -99,6 +99,6 @@ jobs:
                   push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
                       type=gha
-                      type=registry,ref=${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:dev
+                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
                       type=registry,ref=ghcr.io/${{ github.repository }}:dev
                   cache-to: ${{ (github.event_name != 'pull_request') && 'type=gha,mode=max' || '' }}
