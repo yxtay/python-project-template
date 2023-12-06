@@ -12,8 +12,12 @@ on:
 
 jobs:
     context:
+        strategy:
+            matrix:
+                os: [ubuntu-latest]
+
         name: context
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
         steps:
             - name: Dump GitHub context
               env:
