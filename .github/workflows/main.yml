@@ -89,32 +89,37 @@ jobs:
         name: docker
         runs-on: ubuntu-latest
         env:
-            ENVIRONMENT: prod
-            IMAGE_TAG: ${{ github.ref_name }}
+            TEST_IMAGE_TAG: ${{ github.repository }}:ci
+            DOCKERHUB_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
+            GHCR_IMAGE_NAME: ghcr.io/${{ github.repository }}
         steps:
-            - name: Dump GitHub context
-              env:
-                  GITHUB_CONTEXT: ${{ toJson(github) }}
-              run: echo "${GITHUB_CONTEXT}"
-
-            - name: Checkout
-              uses: actions/checkout@v4
-
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
 
-            - name: Docker CI
-              run: |
-                  touch .env
-                  ENVIRONMENT=ci make dc-ci
+            - name: Build CI image
+              env:
+                  ENVIRONMENT: ci
+              uses: docker/build-push-action@v5
+              with:
+                  target: ci
+                  tags: ${{ env.TEST_IMAGE_TAG }}
+                  cache-from: |
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
+                  load: true
+
+            - name: Run Docker CI
+              run: docker run --rm ${{ env.TEST_IMAGE_TAG }}
 
             - name: Docker metadata
               id: docker_metadata
               uses: docker/metadata-action@v5
               with:
                   images: |
-                      ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
-                      ghcr.io/${{ github.repository }}
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}
+                      ${{ env.GHCR_IMAGE_NAME }}
 
             - name: Login to Docker Hub
               if: ${{ github.event_name != 'pull_request' }}
@@ -132,24 +137,28 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Build and push dev image
+              env:
+                  ENVIRONMENT: dev
               uses: docker/build-push-action@v5
               with:
                   target: dev
                   tags: |
-                      ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
-                      ghcr.io/${{ github.repository }}:dev
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      ${{ env.GHCR_IMAGE_NAME }}:dev
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
-                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
-                      type=registry,ref=ghcr.io/${{ github.repository }}:dev
-                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache
-                      type=registry,ref=ghcr.io/${{ github.repository }}:cache
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: type=inline
 
             - name: Build and push prod image
               if: ${{ github.event_name != 'pull_request' }}
+              env:
+                  ENVIRONMENT: prod
               uses: docker/build-push-action@v5
               with:
                   tags: ${{ steps.docker_metadata.outputs.tags }}
@@ -157,10 +166,10 @@ jobs:
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: true
                   cache-from: |
-                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
-                      type=registry,ref=ghcr.io/${{ github.repository }}:dev
-                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache
-                      type=registry,ref=ghcr.io/${{ github.repository }}:cache
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: |
-                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache,mode=max
-                      type=registry,ref=ghcr.io/${{ github.repository }}:cache,mode=max
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache,mode=max
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache,mode=max
