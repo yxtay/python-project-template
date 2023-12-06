@@ -105,7 +105,7 @@ jobs:
                   ENVIRONMENT: ci
               uses: docker/build-push-action@v5
               with:
-                  target: ci
+                  target: ${{ env.ENVIRONMENT }}
                   cache-from: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
@@ -144,7 +144,7 @@ jobs:
                   ENVIRONMENT: dev
               uses: docker/build-push-action@v5
               with:
-                  target: dev
+                  target: ${{ env.ENVIRONMENT }}
                   tags: |
                       ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       ${{ env.GHCR_IMAGE_NAME }}:dev
