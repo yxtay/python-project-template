@@ -43,7 +43,7 @@ jobs:
                   cache: poetry
 
             - name: Poetry cache
-              if: $(( steps.setup-python.outputs.cache-hit != 'true' ))
+              if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
               uses: actions/cache@v3
               with:
                   path: ~/.cache/pypoetry
