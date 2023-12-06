@@ -54,7 +54,7 @@ jobs:
               env:
                   ENVIRONMENT: ci
               run: |
-                  poetry shell
+                  source .venv/bin/activate
                   make run-ci
 
     docker:
