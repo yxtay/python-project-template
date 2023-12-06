@@ -102,10 +102,11 @@ jobs:
                       ghcr.io/${{ github.repository }}:dev
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
+                  push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
                       type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
                       type=registry,ref=ghcr.io/${{ github.repository }}:dev
-                  cache-to: ${{ (github.event_name != 'pull_request') && 'type=inline' || '' }}
+                  cache-to: type=inline
 
             - name: Build and push prod image
               uses: docker/build-push-action@v5
