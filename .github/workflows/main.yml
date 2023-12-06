@@ -60,6 +60,9 @@ jobs:
                   GITHUB_CONTEXT: ${{ toJson(github) }}
               run: echo "${GITHUB_CONTEXT}"
 
+            - name: Checkout
+              uses: actions/checkout@v4
+
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
 
