@@ -37,10 +37,8 @@ deps-install:  ## install dependencies
 
 .PHONY: deps-install-ci
 deps-install-ci:
-	python -m pip install poetry
-	python -m poetry config virtualenvs.create false
-	python -m poetry install --no-root
-	python -m poetry show
+	poetry install --no-root
+	pip list
 
 .PHONY: deps-update
 deps-update:
