@@ -30,15 +30,14 @@ help:  ## print help message
 
 ## dependencies
 
-.PHONY: deps-install
-deps-install:  ## install dependencies
+.PHONY: deps-install-python
+deps-install-python:
 	poetry install
-	python -m pre_commit install --install-hooks
-
-.PHONY: deps-install-ci
-deps-install-ci:
-	poetry install --no-root
 	pip list
+
+.PHONY: deps-install
+deps-install: deps-install-python ## install dependencies
+	python -m pre_commit install --install-hooks
 
 .PHONY: deps-update
 deps-update:
@@ -72,7 +71,7 @@ test:
 	python -m pytest $(TEST_DIR) --cov $(SOURCE_DIR)
 
 .PHONY: run-ci
-run-ci: deps-install-ci lint test  ## run ci
+run-ci: deps-install-python lint test  ## run ci
 
 ## app
 

@@ -27,6 +27,7 @@ jobs:
 
             - name: Install Poetry
               run: |
+                  pipx environment
                   pipx install poetry
                   poetry config virtualenvs.in-project true
 
@@ -36,19 +37,14 @@ jobs:
                   python-version: 3.12
                   cache: poetry
 
-            # - name: Install Poetry
-            #   uses: snok/install-poetry@v1
-            #   with:
-            #       virtualenvs-create: false
-
-            # - name: Poetry cache
-            #   uses: actions/cache@v3
-            #   with:
-            #       path: ~/.cache/pypoetry
-            #       key: ${{ runner.os }}-pypoetry-${{ hashFiles('**/poetry.lock') }}
-            #       restore-keys: |
-            #           ${{ runner.os }}-pypoetry-${{ hashFiles('**/poetry.lock') }}
-            #           ${{ runner.os }}-pypoetry-
+            - name: Poetry cache
+              uses: actions/cache@v3
+              with:
+                  path: ~/.cache/pypoetry
+                  key: pypoetry-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+                  restore-keys: |
+                      pypoetry-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+                      pypoetry-${{ runner.os }}-
 
             - name: Run CI
               env:
