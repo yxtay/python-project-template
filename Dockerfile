@@ -13,10 +13,10 @@ ARG HOME=/home/${USER}
 RUN useradd --create-home --uid ${UID} --user-group ${USER}
 
 # set up environment
-ARG VIRTUAL_ENV=${HOME}/.venv
-ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
+ENV VIRTUAL_ENV=${HOME}/.venv \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1
+ENV PATH=${VIRTUAL_ENV}/bin:${PATH}
 
 ##
 # dev
@@ -31,7 +31,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         curl \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_COMPILE=1 \
     POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=0
