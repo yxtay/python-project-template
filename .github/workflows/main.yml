@@ -99,9 +99,9 @@ jobs:
                   push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
                       type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
-                      type=registry,ref=ghcr.io/${{ github.repository }}:dev
+                      ${{ 'type=registry,ref=ghcr.io/'github.repository':dev' }}
                       type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache
-                      type=registry,ref=ghcr.io/${{ github.repository }}:cache
+                      ${{ 'type=registry,ref=ghcr.io/'github.repository':cache' }}
                   cache-to: |
-                      ${{ (github.event_name != 'pull_request') && 'type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache,mode=max' || '' }}
-                      ${{ (github.event_name != 'pull_request') && 'type=registry,ref=ghcr.io/${{ github.repository }}:cache,mode=max' || '' }}
+                      ${{ (github.event_name != 'pull_request') && 'type=registry,ref='secrets.DOCKERHUB_USERNAME'/'github.event.repository.name':cache,mode=max' || '' }}
+                      ${{ (github.event_name != 'pull_request') && 'type=registry,ref=ghcr.io/'github.repository':cache,mode=max' || '' }}
