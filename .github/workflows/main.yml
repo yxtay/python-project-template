@@ -3,12 +3,12 @@ name: main
 on:
     push:
         branches:
-            - main
+            - ${{ github.event.repository.default_branch }}
         tags:
             - "**"
     pull_request:
         branches:
-            - main
+            - ${{ github.event.repository.default_branch }}
 
 jobs:
     cicd:
@@ -18,6 +18,11 @@ jobs:
             ENVIRONMENT: prod
             IMAGE_TAG: ${{ github.ref_name }}
         steps:
+            - name: Dump GitHub context
+              env:
+                  GITHUB_CONTEXT: ${{ toJson(github) }}
+              run: echo "${GITHUB_CONTEXT}"
+
             - name: Checkout
               uses: actions/checkout@v4
 
