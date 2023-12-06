@@ -10,6 +10,8 @@ services:
                 ENVIRONMENT: ${ENVIRONMENT:-dev}
             cache_from:
                 - yxtay/python-project-template:dev
+            cache_to:
+                - type=inline
             target: dev
         volumes:
             - .:/home/user/app
@@ -29,6 +31,8 @@ services:
             cache_from:
                 - yxtay/python-project-template:dev
                 - yxtay/python-project-template:ci
+            cache_to:
+                - type=inline
             target: ci
         env_file: .env
         profiles:
