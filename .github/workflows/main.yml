@@ -99,10 +99,10 @@ jobs:
             - name: Env CACHE_FROM
               env:
                   CACHE_FROM: |
-                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:cache
-                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
               run: echo "CACHE_FROM=${{ env.CACHE_FROM }}" >> $GITHUB_ENV
 
             - name: Set up Docker Buildx
