@@ -82,12 +82,11 @@ jobs:
                   target: dev
                   tags: |
                       ${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:dev
-                      ghcr.io/${{ github.repository }}:dev
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: ${{ github.event_name != 'pull_request' }}
-                  cache-from: type=registry
-                  cache-to: ${{ (github.event_name != 'pull_request') && 'type=registry,mode=max' }}
+                  cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:dev
+                  cache-to: ${{ (github.event_name != 'pull_request') && 'type=registry,ref=${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:dev,mode=max' }}
 
             - name: Build and push prod image
               uses: docker/build-push-action@v5
@@ -98,5 +97,4 @@ jobs:
                   push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
                       type=gha
-                      type=registry
                   cache-to: ${{ (github.event_name != 'pull_request') && 'type=gha,mode=max' }}
