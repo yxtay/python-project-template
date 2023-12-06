@@ -95,12 +95,16 @@ jobs:
         env:
             DOCKERHUB_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
             GHCR_IMAGE_NAME: ghcr.io/${{ github.repository }}
-            CACHE_FROM: |
-                type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
-                type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
-                type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
-                type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
         steps:
+            - name: Env CACHE_FROM
+              env:
+                  CACHE_FROM: |
+                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:cache
+              run: echo "CACHE_FROM=${{ env.CACHE_FROM }}" >> $GITHUB_ENV
+
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
 
