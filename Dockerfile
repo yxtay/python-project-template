@@ -13,10 +13,13 @@ ARG HOME=/home/${USER}
 RUN useradd --create-home --uid ${UID} --user-group ${USER}
 
 # set up environment
-ARG VIRTUAL_ENV=${HOME}/.venv
-ENV PATH=${VIRTUAL_ENV}/bin:${PATH} \
-    PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONUNBUFFERED=1 \
+    VIRTUAL_ENV=${HOME}/.venv
+ENV PATH=${VIRTUAL_ENV}/bin:${PATH}
+
+ARG WORKDIR=${HOME}/app
+WORKDIR ${WORKDIR}
 
 ##
 # dev
@@ -37,7 +40,6 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     POETRY_VIRTUALENVS_CREATE=0
 
 # set up python
-WORKDIR ${HOME}/app
 RUN --mount=type=cache,target=${HOME}/.cache/pip \
     pip install poetry && \
     python -m venv --upgrade-deps ${VIRTUAL_ENV} && \
@@ -81,9 +83,8 @@ FROM base AS prod
 
 # set up project
 USER ${USER}
-WORKDIR ${HOME}/app
 COPY --from=dev --chown=${USER}:${USER} ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --from=dev --chown=${USER}:${USER} ${HOME}/app ${HOME}/app
+COPY --from=dev --chown=${USER}:${USER} ${WORKDIR} ${WORKDIR}
 
 EXPOSE 8000
 ARG ENVIRONMENT=prod

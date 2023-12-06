@@ -105,7 +105,7 @@ dc-push:
 
 .PHONY: dc-test
 dc-ci:
-	docker compose run --rm web_ci
+	docker compose run --build --rm web_ci
 
 .PHONY: dc-up
 dc-up:  ## run app image
