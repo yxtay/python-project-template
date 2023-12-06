@@ -47,10 +47,10 @@ jobs:
               uses: actions/cache@v3
               with:
                   path: ~/.cache/pypoetry
-                  key: pypoetry-${{ runner.os }}-${{ .setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+                  key: pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
                   restore-keys: |
-                      pypoetry-${{ runner.os }}-${{ .setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-                      pypoetry-${{ runner.os }}-${{ .setup-python.outputs.python-version }}
+                      pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+                      pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}
                       pypoetry-${{ runner.os }}
 
             - name: Run CI
