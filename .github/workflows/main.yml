@@ -12,7 +12,7 @@ on:
 
 jobs:
     python:
-        name: Python
+        name: python
         runs-on: ubuntu-latest
         env:
             ENVIRONMENT: prod
@@ -48,7 +48,7 @@ jobs:
               run: ENVIRONMENT=ci make run-ci
 
     docker:
-        name: Docker
+        name: docker
         runs-on: ubuntu-latest
         env:
             ENVIRONMENT: prod
