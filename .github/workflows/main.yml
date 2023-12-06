@@ -89,7 +89,6 @@ jobs:
         name: docker
         runs-on: ubuntu-latest
         env:
-            ENVIRONMENT: prod
             TEST_IMAGE_TAG: ${{ github.repository }}:ci
             DOCKERHUB_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
             GHCR_IMAGE_NAME: ghcr.io/${{ github.repository }}
@@ -98,6 +97,8 @@ jobs:
               uses: docker/setup-buildx-action@v3
 
             - name: Build CI image
+              env:
+                  ENVIRONMENT: ci
               uses: docker/build-push-action@v5
               with:
                   target: ci
@@ -136,6 +137,8 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Build and push dev image
+              env:
+                  ENVIRONMENT: dev
               uses: docker/build-push-action@v5
               with:
                   target: dev
@@ -154,6 +157,8 @@ jobs:
 
             - name: Build and push prod image
               if: ${{ github.event_name != 'pull_request' }}
+              env:
+                  ENVIRONMENT: prod
               uses: docker/build-push-action@v5
               with:
                   tags: ${{ steps.docker_metadata.outputs.tags }}
