@@ -98,7 +98,10 @@ jobs:
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
-                      type=gha
                       type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
                       type=registry,ref=ghcr.io/${{ github.repository }}:dev
-                  cache-to: ${{ (github.event_name != 'pull_request') && 'type=gha,mode=max' || '' }}
+                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache
+                      type=registry,ref=ghcr.io/${{ github.repository }}:cache
+                  cache-to: |
+                      ${{ (github.event_name != 'pull_request') && 'type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache,mode=max' || '' }}
+                      ${{ (github.event_name != 'pull_request') && 'type=registry,ref=ghcr.io/${{ github.repository }}:cache,mode=max' || '' }}
