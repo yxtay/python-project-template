@@ -44,8 +44,8 @@ jobs:
             #           ${{ runner.os }}-pypoetry-
 
             - name: Run CI
-              env:
-                  POETRY_VIRTUALENVS_CREATE: 0
+              #   env:
+              #       POETRY_VIRTUALENVS_CREATE: 0
               run: ENVIRONMENT=ci make run-ci
 
     docker:
