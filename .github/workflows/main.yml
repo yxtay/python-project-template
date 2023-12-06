@@ -12,8 +12,13 @@ on:
 
 jobs:
     python:
-        name: python
-        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                os: [ubuntu-latest]
+                python: [3.12]
+
+        name: python ${{ matrix.python }}
+        runs-on: ${{ matrix.os }}
         env:
             ENVIRONMENT: prod
         steps:
@@ -25,27 +30,35 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
+            - name: Install Poetry
+              run: |
+                  pipx install poetry
+                  poetry config virtualenvs.in-project true
+
             - name: Set up Python
+              id: setup-python
               uses: actions/setup-python@v4
               with:
-                  python-version: 3.12
-
-            - name: Install Poetry
-              uses: snok/install-poetry@v1
-              with:
-                  virtualenvs-create: false
+                  python-version: ${{ matrix.python }}
+                  cache: poetry
 
             - name: Poetry cache
+              if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
               uses: actions/cache@v3
               with:
                   path: ~/.cache/pypoetry
-                  key: ${{ runner.os }}-pypoetry-${{ hashFiles('**/poetry.lock') }}
+                  key: pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
                   restore-keys: |
-                      ${{ runner.os }}-pypoetry-${{ hashFiles('**/poetry.lock') }}
-                      ${{ runner.os }}-pypoetry-
+                      pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+                      pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}
+                      pypoetry-${{ runner.os }}
 
             - name: Run CI
-              run: ENVIRONMENT=ci make run-ci
+              env:
+                  ENVIRONMENT: ci
+              run: |
+                  source $(poetry env info --path)/bin/activate
+                  make run-ci
 
     docker:
         name: docker
