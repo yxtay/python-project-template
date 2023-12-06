@@ -6,7 +6,6 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                BUILDKIT_INLINE_CACHE: 1
                 ENVIRONMENT: ${ENVIRONMENT:-dev}
             cache_from:
                 - yxtay/python-project-template:dev
@@ -26,7 +25,6 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                BUILDKIT_INLINE_CACHE: 1
                 ENVIRONMENT: ${ENVIRONMENT:-dev}
             cache_from:
                 - yxtay/python-project-template:dev
@@ -43,7 +41,6 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                BUILDKIT_INLINE_CACHE: 1
                 ENVIRONMENT: ${ENVIRONMENT:-dev}
             cache_from:
                 - yxtay/python-project-template:dev
