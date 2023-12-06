@@ -106,7 +106,6 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   target: ci
-                  tags: ${{ github.repository }}:ci
                   cache-from: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
