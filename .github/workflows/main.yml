@@ -12,8 +12,12 @@ on:
 
 jobs:
     context:
+        strategy:
+            matrix:
+                os: [ubuntu-latest]
+
         name: context
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
         steps:
             - name: Dump GitHub context
               env:
@@ -89,29 +93,29 @@ jobs:
         name: docker
         runs-on: ubuntu-latest
         env:
-            TEST_IMAGE_TAG: ${{ github.repository }}:ci
             DOCKERHUB_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
             GHCR_IMAGE_NAME: ghcr.io/${{ github.repository }}
+
         steps:
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
 
             - name: Build CI image
+              id: build-ci
               env:
                   ENVIRONMENT: ci
               uses: docker/build-push-action@v5
               with:
-                  target: ci
-                  tags: ${{ env.TEST_IMAGE_TAG }}
+                  target: ${{ env.ENVIRONMENT }}
+                  load: true
                   cache-from: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
-                  load: true
 
-            - name: Run Docker CI
-              run: docker run --rm ${{ env.TEST_IMAGE_TAG }}
+            - name: Run CI image
+              run: docker run --rm ${{ steps.build-ci.outputs.imageid }}
 
             - name: Docker metadata
               id: docker_metadata
@@ -141,7 +145,7 @@ jobs:
                   ENVIRONMENT: dev
               uses: docker/build-push-action@v5
               with:
-                  target: dev
+                  target: ${{ env.ENVIRONMENT }}
                   tags: |
                       ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       ${{ env.GHCR_IMAGE_NAME }}:dev
