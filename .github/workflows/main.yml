@@ -102,24 +102,24 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   target: ci
-                  tags: ${{ TEST_IMAGE_TAG }}
+                  tags: ${{ env.TEST_IMAGE_TAG }}
                   cache-from: |
-                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:cache
-                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
                   load: true
 
             - name: Run Docker CI
-              run: docker run --rm ${{ TEST_IMAGE_TAG }}
+              run: docker run --rm ${{ env.TEST_IMAGE_TAG }}
 
             - name: Docker metadata
               id: docker_metadata
               uses: docker/metadata-action@v5
               with:
                   images: |
-                      ${{ DOCKERHUB_IMAGE_NAME }}
-                      ${{ GHCR_IMAGE_NAME }}
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}
+                      ${{ env.GHCR_IMAGE_NAME }}
 
             - name: Login to Docker Hub
               if: ${{ github.event_name != 'pull_request' }}
@@ -143,16 +143,16 @@ jobs:
               with:
                   target: dev
                   tags: |
-                      ${{ DOCKERHUB_IMAGE_NAME }}:dev
-                      ${{ GHCR_IMAGE_NAME }}:dev
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      ${{ env.GHCR_IMAGE_NAME }}:dev
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
-                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:cache
-                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: type=inline
 
             - name: Build and push prod image
@@ -166,10 +166,10 @@ jobs:
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: true
                   cache-from: |
-                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:cache
-                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: |
-                      type=registry,ref=${{ DOCKERHUB_IMAGE_NAME }}:cache,mode=max
-                      type=registry,ref=${{ GHCR_IMAGE_NAME }}:cache,mode=max
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache,mode=max
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache,mode=max
