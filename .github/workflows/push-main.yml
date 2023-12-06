@@ -49,11 +49,11 @@ jobs:
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2
 
-            - name: Docker build
-              run: make dc-build
-
             - name: Docker CI
               run: make dc-ci
+
+            - name: Docker build
+              run: make dc-build
 
             - name: Docker push
               run: make dc-push
