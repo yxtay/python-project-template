@@ -49,7 +49,9 @@ jobs:
               uses: docker/setup-buildx-action@v3
 
             - name: Docker CI
-              run: ENVIRONMENT=ci make dc-ci
+              run: |
+                  touch .env
+                  ENVIRONMENT=ci make dc-ci
 
             - name: Docker metadata
               id: meta
