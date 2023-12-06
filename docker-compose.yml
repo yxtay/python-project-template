@@ -6,10 +6,11 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                BUILDKIT_INLINE_CACHE: 1
                 ENVIRONMENT: ${ENVIRONMENT:-dev}
             cache_from:
                 - yxtay/python-project-template:dev
+            cache_to:
+                - type=inline
             target: dev
         volumes:
             - .:/home/user/app
@@ -24,11 +25,12 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                BUILDKIT_INLINE_CACHE: 1
                 ENVIRONMENT: ${ENVIRONMENT:-dev}
             cache_from:
                 - yxtay/python-project-template:dev
                 - yxtay/python-project-template:ci
+            cache_to:
+                - type=inline
             target: ci
         env_file: .env
         profiles:
@@ -39,7 +41,6 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                BUILDKIT_INLINE_CACHE: 1
                 ENVIRONMENT: ${ENVIRONMENT:-dev}
             cache_from:
                 - yxtay/python-project-template:dev

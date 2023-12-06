@@ -12,7 +12,7 @@ on:
 
 jobs:
     python:
-        name: Python
+        name: python
         runs-on: ubuntu-latest
         env:
             ENVIRONMENT: prod
@@ -48,7 +48,7 @@ jobs:
               run: ENVIRONMENT=ci make run-ci
 
     docker:
-        name: Docker
+        name: docker
         runs-on: ubuntu-latest
         env:
             ENVIRONMENT: prod
@@ -79,14 +79,14 @@ jobs:
                       ghcr.io/${{ github.repository }}
 
             - name: Login to Docker Hub
-              if: github.event_name != 'pull_request'
+              if: ${{ github.event_name != 'pull_request' }}
               uses: docker/login-action@v3
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Login to GHCR
-              if: github.event_name != 'pull_request'
+              if: ${{ github.event_name != 'pull_request' }}
               uses: docker/login-action@v3
               with:
                   registry: ghcr.io
@@ -102,20 +102,27 @@ jobs:
                       ghcr.io/${{ github.repository }}:dev
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
+                  push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
                       type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
                       type=registry,ref=ghcr.io/${{ github.repository }}:dev
-                  cache-to: ${{ (github.event_name != 'pull_request') && 'type=inline' || '' }}
+                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache
+                      type=registry,ref=ghcr.io/${{ github.repository }}:cache
+                  cache-to: type=inline
 
             - name: Build and push prod image
+              if: ${{ github.event_name != 'pull_request' }}
               uses: docker/build-push-action@v5
               with:
                   tags: ${{ steps.docker_metadata.outputs.tags }}
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
-                  push: ${{ github.event_name != 'pull_request' }}
+                  push: true
                   cache-from: |
                       type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
                       type=registry,ref=ghcr.io/${{ github.repository }}:dev
-                      type=gha
-                  cache-to: ${{ (github.event_name != 'pull_request') && 'type=gha' || '' }}
+                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache
+                      type=registry,ref=ghcr.io/${{ github.repository }}:cache
+                  cache-to: |
+                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache,mode=max
+                      type=registry,ref=ghcr.io/${{ github.repository }}:cache,mode=max
