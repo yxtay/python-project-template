@@ -54,7 +54,7 @@ jobs:
                   ENVIRONMENT=ci make dc-ci
 
             - name: Docker metadata
-              id: meta
+              id: docker_metadata
               uses: docker/metadata-action@v5
               with:
                   images: |
@@ -76,18 +76,27 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Login to Docker Hub
-              uses: docker/login-action@v3
-              with:
-                  username: ${{ secrets.DOCKER_USER }}
-                  password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-            - name: Build and push
+            - name: Build and push dev image
               uses: docker/build-push-action@v5
               with:
-                  tags: ${{ steps.meta.outputs.tags }}
-                  labels: ${{ steps.meta.outputs.labels }}
-                  annotations: ${{ steps.meta.outputs.annotations }}
+                  target: dev
+                  tags: |
+                      ${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:dev
+                      ghcr.io/${{ github.repository }}:dev
+                  labels: ${{ steps.docker_metadata.outputs.labels }}
+                  annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: ${{ github.event_name != 'pull_request' }}
-                  cache-from: type=gha
+                  cache-from: type=registry
+                  cache-to: ${{ (github.event_name != 'pull_request') && 'type=registry,mode=max' }}
+
+            - name: Build and push prod image
+              uses: docker/build-push-action@v5
+              with:
+                  tags: ${{ steps.docker_metadata.outputs.tags }}
+                  labels: ${{ steps.docker_metadata.outputs.labels }}
+                  annotations: ${{ steps.docker_metadata.outputs.annotations }}
+                  push: ${{ github.event_name != 'pull_request' }}
+                  cache-from: |
+                      type=gha
+                      type=registry
                   cache-to: ${{ (github.event_name != 'pull_request') && 'type=gha,mode=max' }}
