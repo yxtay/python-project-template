@@ -106,6 +106,8 @@ jobs:
                   cache-from: |
                       type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
                       type=registry,ref=ghcr.io/${{ github.repository }}:dev
+                      type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache
+                      type=registry,ref=ghcr.io/${{ github.repository }}:cache
                   cache-to: type=inline
 
             - name: Build and push prod image
