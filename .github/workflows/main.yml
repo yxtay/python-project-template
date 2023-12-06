@@ -95,4 +95,4 @@ jobs:
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: ${{ github.event_name != 'pull_request' }}
                   cache-from: type=gha
-                  cache-to: ${{ (github.event_name != 'pull_request') && 'type=gha,mode=max' }}
+                  cache-to: type=gha,mode=max
