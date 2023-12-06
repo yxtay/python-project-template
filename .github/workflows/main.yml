@@ -95,11 +95,6 @@ jobs:
         env:
             DOCKERHUB_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
             GHCR_IMAGE_NAME: ghcr.io/${{ github.repository }}
-            CACHE_FROM: |
-                type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev
-                type=registry,ref=ghcr.io/${{ github.repository }}:dev
-                type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:cache
-                type=registry,ref=ghcr.io/${{ github.repository }}:cache
 
         steps:
             - name: Set up Docker Buildx
@@ -112,8 +107,12 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   target: ${{ env.ENVIRONMENT }}
-                  cache-from: $${{ env.CACHE_FROM }}
                   load: true
+                  cache-from: |
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
 
             - name: Run CI image
               run: docker run --rm ${{ steps.build-ci.outputs.imageid }}
@@ -153,7 +152,11 @@ jobs:
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: ${{ github.event_name != 'pull_request' }}
-                  cache-from: $${{ env.CACHE_FROM }}
+                  cache-from: |
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: type=inline
 
             - name: Build and push prod image
@@ -166,7 +169,11 @@ jobs:
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: true
-                  cache-from: $${{ env.CACHE_FROM }}
+                  cache-from: |
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
+                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache,mode=max
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache,mode=max
