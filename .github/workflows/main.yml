@@ -49,9 +49,6 @@ jobs:
                   MATRIX_CONTEXT: ${{ toJson(matrix) }}
               run: echo "${MATRIX_CONTEXT}"
 
-            - name: Set GITHUB_PATH
-              run: echo "$(pipx environment -v PIPX_HOME)" >> ${GITHUB_PATH}
-
             - name: Dump env
               run: env | sort
 
@@ -74,6 +71,7 @@ jobs:
                   pipx install poetry
                   poetry config virtualenvs.in-project true
                   echo "POETRY_CACHE_DIR=$(poetry config cache-dir)" >> ${GITHUB_ENV}
+                  echo "VIRTUAL_ENV=$(poetry env info --path)" >> ${GITHUB_ENV}
                   echo "$(poetry env info --path)/bin" >> ${GITHUB_PATH}
 
             - name: Set up Python
@@ -97,7 +95,9 @@ jobs:
               run: poetry install --no-interaction
 
             - name: Lint and test
-              run: make lint test
+              run: |
+                  # source ${{ env.VIRTUAL_ENV }}/bin/activate
+                  make lint test
 
     docker:
         name: docker
