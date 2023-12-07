@@ -106,13 +106,13 @@ jobs:
                   ENVIRONMENT: ci
               uses: docker/build-push-action@v5
               with:
-                  target: ${{ env.ENVIRONMENT }}
-                  load: true
                   cache-from: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
+                  target: ${{ env.ENVIRONMENT }}
+                  load: true
 
             - name: Run CI image
               run: docker run --rm ${{ steps.build-ci.outputs.imageid }}
@@ -146,17 +146,17 @@ jobs:
                   ENVIRONMENT: dev
               uses: docker/build-push-action@v5
               with:
-                  target: ${{ env.ENVIRONMENT }}
-                  tags: |
-                      ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
-                      ${{ env.GHCR_IMAGE_NAME }}:dev
-                  push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: type=inline
+                  target: ${{ env.ENVIRONMENT }}
+                  tags: |
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      ${{ env.GHCR_IMAGE_NAME }}:dev
+                  push: ${{ github.event_name != 'pull_request' }}
 
             - name: Build and push prod image
               if: ${{ github.event_name != 'pull_request' }}
@@ -164,10 +164,6 @@ jobs:
                   ENVIRONMENT: prod
               uses: docker/build-push-action@v5
               with:
-                  tags: ${{ steps.docker_metadata.outputs.tags }}
-                  labels: ${{ steps.docker_metadata.outputs.labels }}
-                  annotations: ${{ steps.docker_metadata.outputs.annotations }}
-                  push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
@@ -176,3 +172,7 @@ jobs:
                   cache-to: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache,mode=max
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache,mode=max
+                  tags: ${{ steps.docker_metadata.outputs.tags }}
+                  labels: ${{ steps.docker_metadata.outputs.labels }}
+                  annotations: ${{ steps.docker_metadata.outputs.annotations }}
+                  push: ${{ github.event_name != 'pull_request' }}
