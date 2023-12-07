@@ -60,7 +60,7 @@ jobs:
 
             - name: Pipx env
               run: |
-                  echo "PIPX_HOME=$(pipx environment -v PIPX_HOME)" >> $GITHUB_ENV
+                  echo "PIPX_LOCAL_VENVS=$(pipx environment -v PIPX_LOCAL_VENVS)" >> $GITHUB_ENV
                   echo "PIPX_BIN_DIR=$(pipx environment -v PIPX_BIN_DIR)" >> $GITHUB_ENV
 
             - name: Pipx cache
