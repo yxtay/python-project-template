@@ -58,6 +58,16 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
+            - name: Pipx cache
+              uses: actions/cache@v3
+              with:
+                  path: |
+                      ${{ env.PIPX_HOME }}
+                      ${{ env.PIPX_BIN_DIR }}
+                  key: pipx-${{ runner.os }}
+                  restore-keys: |
+                      pipx-${{ runner.os }}
+
             - name: Install Poetry
               run: |
                   pipx install poetry
@@ -74,7 +84,7 @@ jobs:
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
               uses: actions/cache@v3
               with:
-                  path: ~/.cache/pypoetry
+                  path: $( poetry config cache-dir )
                   key: pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
                   restore-keys: |
                       pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
