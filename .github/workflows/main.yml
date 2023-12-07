@@ -62,6 +62,7 @@ jobs:
               run: |
                   pipx install poetry
                   poetry config virtualenvs.in-project true
+                  echo "POETRY_CACHE_DIR=$(poetry config cache-dir)" >> $GITHUB_ENV
 
             - name: Set up Python
               id: setup-python
@@ -69,10 +70,6 @@ jobs:
               with:
                   python-version: ${{ matrix.python }}
                   cache: poetry
-
-            - name: Poetry env
-              run: |
-                  echo "POETRY_CACHE_DIR=$(poetry config cache-dir)" >> $GITHUB_ENV
 
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
