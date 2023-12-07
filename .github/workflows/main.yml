@@ -58,7 +58,7 @@ jobs:
                 os: [ubuntu-latest]
                 python: [3.12]
 
-        name: python ${{ matrix.python }}
+        name: python
         runs-on: ${{ matrix.os }}
         env:
             ENVIRONMENT: ci
