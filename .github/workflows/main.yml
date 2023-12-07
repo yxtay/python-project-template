@@ -107,10 +107,10 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   cache-from: |
-                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
-                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      ${{ env.GHCR_IMAGE_NAME }}:dev
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      ${{ env.GHCR_IMAGE_NAME }}:cache
                   target: ${{ env.ENVIRONMENT }}
                   load: true
 
@@ -147,10 +147,10 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   cache-from: |
-                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
-                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      ${{ env.GHCR_IMAGE_NAME }}:dev
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      ${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: type=inline
                   target: ${{ env.ENVIRONMENT }}
                   tags: |
@@ -165,10 +165,10 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   cache-from: |
-                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
-                      type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache
-                      type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
+                      ${{ env.GHCR_IMAGE_NAME }}:dev
+                      ${{ env.DOCKERHUB_IMAGE_NAME }}:cache
+                      ${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:cache,mode=max
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:cache,mode=max
