@@ -58,10 +58,12 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
+            - name: Pipx env
+              run: |
+                  echo "PIPX_HOME=$(pipx environment -v PIPX_HOME)" >> $GITHUB_ENV
+                  echo "PIPX_BIN_DIR=$(pipx environment -v PIPX_BIN_DIR)" >> $GITHUB_ENV
+
             - name: Pipx cache
-              env:
-                  PIPX_HOME: $(pipx environment -v PIPX_HOME)
-                  PIPX_BIN_DIR: $(pipx environment -v PIPX_BIN_DIR)
               uses: actions/cache@v3
               with:
                   path: |
@@ -83,10 +85,12 @@ jobs:
                   python-version: ${{ matrix.python }}
                   cache: poetry
 
+            - name: Poetry env
+              run: |
+                  echo "POETRY_CACHE_DIR=$(poetry config cache-dir)" >> $GITHUB_ENV
+
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
-              env:
-                  POETRY_CACHE_DIR: $(poetry config cache-dir)
               uses: actions/cache@v3
               with:
                   path: ${{ env.POETRY_CACHE_DIR }}
