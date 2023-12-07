@@ -58,21 +58,6 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Pipx env
-              run: |
-                  echo "PIPX_LOCAL_VENVS=$(pipx environment -v PIPX_LOCAL_VENVS)" >> $GITHUB_ENV
-                  echo "PIPX_BIN_DIR=$(pipx environment -v PIPX_BIN_DIR)" >> $GITHUB_ENV
-
-            - name: Pipx cache
-              uses: actions/cache@v3
-              with:
-                  path: |
-                      ${{ env.PIPX_HOME }}
-                      ${{ env.PIPX_BIN_DIR }}
-                  key: pipx-${{ runner.os }}
-                  restore-keys: |
-                      pipx-${{ runner.os }}
-
             - name: Install Poetry
               run: |
                   pipx install poetry
