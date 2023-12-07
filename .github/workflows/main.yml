@@ -92,7 +92,7 @@ jobs:
             - name: Install dependencies
               shell: bash
               run: |
-                  echo "::addPath ::$(poetry env info --path)/bin"
+                  echo "::addPath::$(poetry env info --path)/bin"
                   poetry install --no-interaction
 
             - name: Lint and test
