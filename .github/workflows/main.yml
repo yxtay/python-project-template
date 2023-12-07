@@ -92,7 +92,7 @@ jobs:
             - name: Install dependencies
               run: |
                   echo "VIRTUAL_ENV=$(poetry env info --path)" >> ${GITHUB_ENV}
-                  echo "$(poetry env info --path)/bin" >> ${GITHUB_PATH}
+                  echo "${{ env.VIRTUAL_ENV }}/bin" >> ${GITHUB_PATH}
                   poetry install --no-interaction
 
             - name: Lint and test
