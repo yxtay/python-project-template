@@ -70,11 +70,15 @@ jobs:
                   python-version: ${{ matrix.python }}
                   cache: poetry
 
+            - name: Poetry env
+              run: |
+                  echo "POETRY_CACHE_DIR=$(poetry config cache-dir)" >> $GITHUB_ENV
+
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
               uses: actions/cache@v3
               with:
-                  path: ~/.cache/pypoetry
+                  path: ${{ env.POETRY_CACHE_DIR }}
                   key: pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
                   restore-keys: |
                       pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
