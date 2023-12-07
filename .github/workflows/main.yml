@@ -95,9 +95,7 @@ jobs:
               run: poetry install --no-interaction
 
             - name: Lint and test
-              run: |
-                  # source ${{ env.VIRTUAL_ENV }}/bin/activate
-                  make lint test
+              run: make lint test
 
     docker:
         name: docker
