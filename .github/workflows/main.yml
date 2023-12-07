@@ -59,11 +59,14 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Pipx cache
+              env:
+                  PIPX_HOME: $(pipx environment -v PIPX_HOME)
+                  PIPX_BIN_DIR: $(pipx environment -v PIPX_BIN_DIR)
               uses: actions/cache@v3
               with:
                   path: |
-                      $(pipx environment -v PIPX_HOME)
-                      $(pipx environment -v PIPX_BIN_DIR)
+                      ${{ env.PIPX_HOME }}
+                      ${{ env.PIPX_BIN_DIR }}
                   key: pipx-${{ runner.os }}
                   restore-keys: |
                       pipx-${{ runner.os }}
@@ -82,9 +85,11 @@ jobs:
 
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
+              env:
+                  POETRY_CACHE_DIR: $(poetry config cache-dir)
               uses: actions/cache@v3
               with:
-                  path: $(poetry config cache-dir)
+                  path: ${{ POETRY_CACHE_DIR }}
                   key: pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
                   restore-keys: |
                       pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
