@@ -62,7 +62,7 @@ jobs:
               run: |
                   pipx install poetry
                   poetry config virtualenvs.in-project true
-                  echo "POETRY_CACHE_DIR=$(poetry config cache-dir)" >> $GITHUB_ENV
+                  echo "POETRY_CACHE_DIR=$(poetry config cache-dir)" >> ${GITHUB_ENV}
 
             - name: Set up Python
               id: setup-python
@@ -78,7 +78,6 @@ jobs:
                   path: ${{ env.POETRY_CACHE_DIR }}
                   key: pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
                   restore-keys: |
-                      pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
                       pypoetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}
                       pypoetry-${{ runner.os }}
 
@@ -151,8 +150,6 @@ jobs:
                   tags: |
                       ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       ${{ env.GHCR_IMAGE_NAME }}:dev
-                  labels: ${{ steps.docker_metadata.outputs.labels }}
-                  annotations: ${{ steps.docker_metadata.outputs.annotations }}
                   push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
@@ -170,7 +167,7 @@ jobs:
                   tags: ${{ steps.docker_metadata.outputs.tags }}
                   labels: ${{ steps.docker_metadata.outputs.labels }}
                   annotations: ${{ steps.docker_metadata.outputs.annotations }}
-                  push: true
+                  push: ${{ github.event_name != 'pull_request' }}
                   cache-from: |
                       type=registry,ref=${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       type=registry,ref=${{ env.GHCR_IMAGE_NAME }}:dev
