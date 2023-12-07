@@ -142,6 +142,7 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Build and push dev image
+              if: ${{ github.event_name != 'pull_request' }}
               env:
                   ENVIRONMENT: dev
               uses: docker/build-push-action@v5
