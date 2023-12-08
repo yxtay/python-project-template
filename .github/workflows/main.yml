@@ -50,7 +50,7 @@ jobs:
               run: echo "${MATRIX_CONTEXT}"
 
             - name: Dump environment variables
-              run: ${{ (runner.os == 'Windows') && 'gci env:' || 'env | sort'}}
+              run: ${{ (runner.os == 'Windows') && 'gci env:' || 'env | sort' }}
 
     python:
         strategy:
