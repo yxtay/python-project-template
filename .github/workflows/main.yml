@@ -88,11 +88,11 @@ jobs:
               if: ${{ runner.os == 'Windows' }}
               run: |
                   "POETRY_CACHE_DIR=$(poetry config cache-dir)" | Out-File -FilePath $env:GITHUB_ENV -Append
-                  "$(poetry env info --path)/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+                  "$(poetry env info --path)/Scripts" | Out-File -FilePath $env:GITHUB_PATH -Append
 
             - name: Environment (Windows)
               if: ${{ runner.os == 'Windows' }}
-              run: gci env:*
+              run: gci env:* | sort-object name
 
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
@@ -109,8 +109,8 @@ jobs:
 
             - name: Lint and test
               run: |
-                  ${{ (runner.os == 'Windows') && '.venv/Scripts/activate' || '' }}
-                  make lint test
+                  #   ${{ (runner.os == 'Windows') && '.venv/Scripts/activate' || '' }}
+                    make lint test
 
     docker:
         name: docker
