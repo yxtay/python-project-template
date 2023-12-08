@@ -50,7 +50,7 @@ jobs:
               run: echo "${MATRIX_CONTEXT}"
 
             - name: Dump env
-              run: env | sort
+              run: ${{ (runner.os == 'Windows') && 'gci env:' || 'env | sort'}}
 
     python:
         strategy:
@@ -83,16 +83,14 @@ jobs:
               run: |
                   echo "POETRY_CACHE_DIR=$(poetry config cache-dir)" >> ${GITHUB_ENV}
                   echo "$(poetry env info --path)/bin" >> ${GITHUB_PATH}
+                  env | sort
 
             - name: Set up environment (Windows)
               if: ${{ runner.os == 'Windows' }}
               run: |
                   "POETRY_CACHE_DIR=$(poetry config cache-dir)" | Out-File -FilePath $env:GITHUB_ENV -Append
                   "$(poetry env info --path)/Scripts" | Out-File -FilePath $env:GITHUB_PATH -Append
-
-            - name: Environment (Windows)
-              if: ${{ runner.os == 'Windows' }}
-              run: gci env:* | sort-object name
+                  gci env:
 
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
@@ -108,9 +106,7 @@ jobs:
               run: poetry install --no-interaction
 
             - name: Lint and test
-              run: |
-                  #   ${{ (runner.os == 'Windows') && '.venv/Scripts/activate' || '' }}
-                    make lint test
+              run: make lint test
 
     docker:
         name: docker
