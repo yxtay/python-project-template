@@ -86,6 +86,7 @@ jobs:
 
             - name: Set up environment (Windows)
               if: ${{ runner.os == 'Windows' }}
+              shell: pwsh
               run: |
                   "POETRY_CACHE_DIR=$(poetry config cache-dir)" | Out-File -FilePath $env:GITHUB_ENV -Append
                   "$(poetry env info --path)/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
@@ -105,7 +106,7 @@ jobs:
 
             - name: Lint and test
               run: |
-                  ${{ (runner.os == 'Windows') && .venv/bin/activate || '' }}
+                  ${{ (runner.os == 'Windows') && '.venv/bin/activate' || '' }}
                   make lint test
 
     docker:
