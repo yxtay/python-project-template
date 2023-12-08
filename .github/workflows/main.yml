@@ -106,7 +106,7 @@ jobs:
 
             - name: Lint and test
               run: |
-                  ${{ (runner.os == 'Windows') && '.venv/bin/activate' || '' }}
+                  ${{ (runner.os == 'Windows') && '.venv/Scripts/activate' || '' }}
                   make lint test
 
     docker:
