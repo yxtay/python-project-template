@@ -86,10 +86,13 @@ jobs:
 
             - name: Set up environment (Windows)
               if: ${{ runner.os == 'Windows' }}
-              shell: pwsh
               run: |
                   "POETRY_CACHE_DIR=$(poetry config cache-dir)" | Out-File -FilePath $env:GITHUB_ENV -Append
                   "$(poetry env info --path)/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+            - name: Environment (Windows)
+              if: ${{ runner.os == 'Windows' }}
+              run: "gci env:"
 
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
