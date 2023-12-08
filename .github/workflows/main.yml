@@ -123,12 +123,12 @@ jobs:
                   ENVIRONMENT: ci
               uses: docker/build-push-action@v5
               with:
+                  target: ${{ env.ENVIRONMENT }}
                   cache-from: |
                       ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       ${{ env.GHCR_IMAGE_NAME }}:dev
                       ${{ env.DOCKERHUB_IMAGE_NAME }}:cache
                       ${{ env.GHCR_IMAGE_NAME }}:cache
-                  target: ${{ env.ENVIRONMENT }}
                   load: true
 
             - name: Run CI image
@@ -163,13 +163,13 @@ jobs:
                   ENVIRONMENT: dev
               uses: docker/build-push-action@v5
               with:
+                  target: ${{ env.ENVIRONMENT }}
                   cache-from: |
                       ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       ${{ env.GHCR_IMAGE_NAME }}:dev
                       ${{ env.DOCKERHUB_IMAGE_NAME }}:cache
                       ${{ env.GHCR_IMAGE_NAME }}:cache
                   cache-to: type=inline
-                  target: ${{ env.ENVIRONMENT }}
                   tags: |
                       ${{ env.DOCKERHUB_IMAGE_NAME }}:dev
                       ${{ env.GHCR_IMAGE_NAME }}:dev
