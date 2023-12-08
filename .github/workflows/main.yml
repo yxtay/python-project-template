@@ -104,7 +104,9 @@ jobs:
               run: poetry install --no-interaction
 
             - name: Lint and test
-              run: make lint test
+              run: |
+                  ${{ (runner.os == 'Windows') && .venv/bin/activate || '' }}
+                  make lint test
 
     docker:
         name: docker
