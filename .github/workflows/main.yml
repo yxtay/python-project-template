@@ -70,7 +70,6 @@ jobs:
               run: |
                   pipx install poetry
                   poetry config virtualenvs.in-project true
-                  echo "::exportVariable::POETRY_CACHE_DIR::$(poetry config cache-dir)"
 
             - name: Set up Python
               id: setup-python
@@ -102,10 +101,7 @@ jobs:
                       pypoetry-${{ runner.os }}
 
             - name: Install dependencies
-              shell: bash
-              run: |
-                  echo "::addPath::$(poetry env info --path)/bin"
-                  poetry install --no-interaction
+              run: poetry install --no-interaction
 
             - name: Lint and test
               run: make lint test
