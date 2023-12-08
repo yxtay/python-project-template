@@ -49,7 +49,7 @@ jobs:
                   MATRIX_CONTEXT: ${{ toJson(matrix) }}
               run: echo "${MATRIX_CONTEXT}"
 
-            - name: Dump env
+            - name: Dump environment variables
               run: ${{ (runner.os == 'Windows') && 'gci env:' || 'env | sort'}}
 
     python:
@@ -83,14 +83,12 @@ jobs:
               run: |
                   echo "POETRY_CACHE_DIR=$(poetry config cache-dir)" >> ${GITHUB_ENV}
                   echo "$(poetry env info --path)/bin" >> ${GITHUB_PATH}
-                  env | sort
 
             - name: Set up environment (Windows)
               if: ${{ runner.os == 'Windows' }}
               run: |
                   "POETRY_CACHE_DIR=$(poetry config cache-dir)" | Out-File -FilePath $env:GITHUB_ENV -Append
                   "$(poetry env info --path)/Scripts" | Out-File -FilePath $env:GITHUB_PATH -Append
-                  gci env:
 
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
