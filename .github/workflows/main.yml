@@ -87,8 +87,8 @@ jobs:
             - name: Set up environment (Windows)
               if: ${{ runner.os == 'Windows' }}
               run: |
-                  "POETRY_CACHE_DIR=$(poetry config cache-dir)" | Out-File -FilePath $env:GITHUB_ENV -Append
-                  "$(poetry env info --path)/Scripts" | Out-File -FilePath $env:GITHUB_PATH -Append
+                  "POETRY_CACHE_DIR=$(poetry config cache-dir)" | Out-File -FilePath ${env:GITHUB_ENV} -Append
+                  "$(poetry env info --path)/Scripts" | Out-File -FilePath ${env:GITHUB_PATH} -Append
 
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
