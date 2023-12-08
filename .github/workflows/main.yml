@@ -92,7 +92,7 @@ jobs:
 
             - name: Environment (Windows)
               if: ${{ runner.os == 'Windows' }}
-              run: "gci env:"
+              run: gci env:*
 
             - name: Poetry cache
               if: ${{ steps.setup-python.outputs.cache-hit != 'true' }}
