@@ -124,7 +124,7 @@ jobs:
                       var-cache-apt
                       root-cache-pip
                       root-cache-pypoetry
-                  key: buildkit-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock')
+                  key: buildkit-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
                   restore-keys: |
                       buildkit-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}
                       buildkit-${{ runner.os }}
