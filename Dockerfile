@@ -13,10 +13,11 @@ ARG HOME=/home/${USER}
 RUN useradd --create-home --uid ${UID} --user-group ${USER}
 
 # set up environment
+ARG VIRTUAL_ENV=${HOME}/.venv
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
-    VIRTUAL_ENV=${HOME}/.venv
-ENV PATH=${VIRTUAL_ENV}/bin:${PATH}
+    VIRTUAL_ENV=${VIRTUAL_ENV} \
+    PATH=${VIRTUAL_ENV}/bin:${PATH}
 
 ARG APP_HOME=${HOME}/app
 WORKDIR ${APP_HOME}
