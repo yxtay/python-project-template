@@ -9,17 +9,16 @@ LABEL maintainer="wyextay@gmail.com"
 # set up user
 ARG USER=user
 ARG UID=1000
-ARG HOME=/home/${USER}
-RUN useradd --create-home --uid ${UID} --user-group ${USER}
+RUN useradd --no-create-home --shell /bin/false --uid ${UID} ${USER}
 
 # set up environment
-ARG VIRTUAL_ENV=${HOME}/.venv
+ARG VIRTUAL_ENV=/opt/venv
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     VIRTUAL_ENV=${VIRTUAL_ENV} \
     PATH=${VIRTUAL_ENV}/bin:${PATH}
 
-ARG APP_HOME=${HOME}/app
+ARG APP_HOME=/opt/app
 WORKDIR ${APP_HOME}
 
 ##
@@ -32,7 +31,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update && \
     apt-get install --no-install-recommends -y \
         build-essential \
-        curl \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -42,12 +41,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     POETRY_VIRTUALENVS_CREATE=0
 
 # set up python
-RUN --mount=type=cache,target=${HOME}/.cache/pip \
+RUN --mount=type=cache,target=/root/.cache/pip \
     pip install poetry && \
     python -m venv --upgrade-deps ${VIRTUAL_ENV} && \
-    chown -R ${USER}:${USER} ${HOME}
+    chown -R ${USER}:${USER} ${VIRTUAL_ENV} && \
+    chown -R ${USER}:${USER} ${APP_HOME}
 COPY --chown=${USER}:${USER} pyproject.toml poetry.lock ./
-RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
+RUN --mount=type=cache,target=/root/.cache/pypoetry \
     poetry install --only main && \
     python --version && \
     pip list
@@ -68,7 +68,7 @@ CMD ["gunicorn", "src.web:app", "-c", "src/gunicorn_conf.py"]
 FROM dev AS ci
 
 USER root
-RUN --mount=type=cache,target=${HOME}/.cache/pypoetry \
+RUN --mount=type=cache,target=/root/.cache/pypoetry \
     poetry install && \
     pip list
 
