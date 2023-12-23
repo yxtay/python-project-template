@@ -56,14 +56,14 @@ requirements-dev.txt: poetry.lock
 .PHONY: format
 format:
 	python -m ruff check --fix .
+	python -m ruff format .
 	python -m isort .
-	python -m black $(SOURCE_DIR) $(TEST_DIR)
 
 .PHONY: lint
 lint:
 	python -m ruff check .
+	python -m ruff format .
 	python -m isort . --check --diff
-	python -m black $(SOURCE_DIR) $(TEST_DIR) --diff
 	python -m mypy $(SOURCE_DIR)
 
 .PHONY: test
