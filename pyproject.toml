@@ -18,7 +18,6 @@ uvicorn = "*"
 pydantic-settings = "*"
 
 [tool.poetry.group.dev.dependencies]
-black = { allow-prereleases = true, version = "*" }
 fastapi = { extras = ["all"], version = "*" }
 isort = "*"
 mypy = "*"
@@ -47,6 +46,7 @@ addopts = """
 """
 
 [tool.ruff]
+unsafe-fixes = true
 fix = true
 select = ["ALL"]
 ignore = [
