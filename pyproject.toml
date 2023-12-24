@@ -23,7 +23,6 @@ pydantic-settings = "*"
 
 [tool.poetry.group.dev.dependencies]
 fastapi = { extras = ["all"], version = "*" }
-isort = "*"
 mypy = "*"
 pre-commit = "*"
 pytest = "*"
@@ -40,6 +39,7 @@ target-version = ["py311"]
 # https://github.com/psf/black/blob/master/docs/compatible_configs.md
 profile = "black"
 float_to_top = true
+src_paths = [".", "src", "tests"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -50,22 +50,18 @@ addopts = """
 """
 
 [tool.ruff]
-unsafe-fixes = true
 fix = true
+src = [".", "src", "tests"]
 select = ["ALL"]
 ignore = [
     "D",      # pydocstyle
-    "I",      # isort
     "ERA",    # eradicate
-    "B008",   # function-call-in-default-argument
     "E501",   # line-too-long
-    "COM812", # missing-trailing-comma
+    "COM812", # missing-trailing-comma # conflicts with ruff formatter
+    "ISC001", # single-line-implicit-string-concatenation # conflicts with ruff formatter
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/*" = [
     "S101", # assert
 ]
-
-[tool.ruff.format]
-skip-magic-trailing-comma = true
