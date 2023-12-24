@@ -31,16 +31,11 @@ def _get_log_formatter() -> StackdriverFormatter:
     # formatter
     log_format = "%(asctime)s - %(levelname)s - %(name)s - %(processName)s - %(threadName)s - %(filename)s - %(module)s - %(lineno)d - %(funcName)s - %(message)s"
     date_format = "%Y-%m-%dT%H:%M:%S"
-    return StackdriverFormatter(
-        fmt=log_format,
-        datefmt=date_format,
-        timestamp=True,
-    )  # type: ignore[no-untyped-call]
+    return StackdriverFormatter(fmt=log_format, datefmt=date_format, timestamp=True)  # type: ignore[no-untyped-call]
 
 
 def _get_file_handler(
-    log_path: str = "main.log",
-    log_level: int = logging.DEBUG,
+    log_path: str = "main.log", log_level: int = logging.DEBUG
 ) -> RotatingFileHandler:
     file_handler = RotatingFileHandler(
         log_path,
@@ -62,9 +57,7 @@ def _get_stdout_handler(log_level: int = logging.INFO) -> logging.StreamHandler:
 
 
 def configure_log_listener(
-    *,
-    console: bool = True,
-    log_path: str = "main.log",
+    *, console: bool = True, log_path: str = "main.log"
 ) -> QueueListener:
     """Configure log queue listener to log into file and console.
 
