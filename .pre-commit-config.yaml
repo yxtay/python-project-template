@@ -43,7 +43,7 @@ repos:
           - id: fix-encoding-pragma
             args: [--remove]
           - id: name-tests-test
-          - id: requirements-txt-fixer
+          #   - id: requirements-txt-fixer
 
           # configs
           - id: check-json
@@ -69,6 +69,14 @@ repos:
           - id: poetry-check
           - id: poetry-lock
           - id: poetry-export
+            args:
+                [
+                    --format,
+                    requirements.txt,
+                    --output,
+                    requirements.txt,
+                    --without-hashes,
+                ]
           - id: poetry-install
             stages: [post-checkout, post-merge]
 

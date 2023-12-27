@@ -11,7 +11,7 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 fastapi = "*"
 gunicorn = "*"
 pydantic = { extras = ["dotenv"], version = "*" }
@@ -28,6 +28,7 @@ pre-commit = "*"
 pytest = "*"
 pytest-cov = "*"
 ruff = "*"
+commitizen = "^3.13.0"
 
 [tool.black]
 line-length = 88
@@ -42,12 +43,8 @@ float_to_top = true
 src_paths = [".", "src", "tests"]
 
 [tool.pytest.ini_options]
+addopts = ["-ra", "-v", "--strict-markers", "--import-mode=importlib"]
 minversion = "6.0"
-addopts = """
-    -ra
-    -v
-    --strict-markers
-"""
 
 [tool.ruff]
 fix = true
