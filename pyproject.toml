@@ -52,11 +52,17 @@ src = [".", "src", "tests"]
 select = ["ALL"]
 ignore = [
     "D",      # pydocstyle
-    "ERA",    # eradicate
     "E501",   # line-too-long
     "COM812", # missing-trailing-comma # conflicts with ruff formatter
     "ISC001", # single-line-implicit-string-concatenation # conflicts with ruff formatter
 ]
+unfixable = [
+    "ERA", # eradicate
+    "T20", # flake8-print
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/*" = [
