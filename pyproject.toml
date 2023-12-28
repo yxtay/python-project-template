@@ -49,6 +49,7 @@ minversion = "6.0"
 [tool.ruff]
 fix = true
 src = [".", "src", "tests"]
+extend-include = ["*.ipynb"]
 select = ["ALL"]
 ignore = [
     "D",      # pydocstyle
