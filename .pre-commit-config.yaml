@@ -48,7 +48,7 @@ repos:
           - id: fix-encoding-pragma
             args: [--remove]
           - id: name-tests-test
-          #   - id: requirements-txt-fixer
+          #   - id: requirements-txt-fixer  # conflicts with poetry
 
           # configs
           - id: check-json
