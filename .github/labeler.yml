@@ -1,32 +1,32 @@
 feature:
-    - head-branch: ["^feat"]
+    - head-branch: ["^feat(ure)?/"]
 
 fix:
-    - head-branch: ["^fix"]
+    - head-branch: ["^fix/"]
 
 docs:
-    - head-branch: ["^docs"]
+    - head-branch: ["^docs?/"]
 
 style:
-    - head-branch: ["^style"]
+    - head-branch: ["^style/"]
 
 refactor:
-    - head-branch: ["^refactor"]
+    - head-branch: ["^refactor/"]
 
 perf:
-    - head-branch: ["^perf"]
+    - head-branch: ["^perf(ormance)?/"]
 
 test:
-    - head-branch: ["^test"]
+    - head-branch: ["^tests?/"]
 
 build:
-    - head-branch: ["^build"]
+    - head-branch: ["^build/"]
 
 ci:
-    - head-branch: ["^ci"]
+    - head-branch: ["^ci/"]
 
 chore:
-    - head-branch: ["^chore"]
+    - head-branch: ["^chore/"]
 
 revert:
-    - head-branch: ["^revert"]
+    - head-branch: ["^revert/"]
