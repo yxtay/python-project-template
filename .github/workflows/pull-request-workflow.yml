@@ -1,0 +1,33 @@
+name: "Pull Request Workflow"
+
+on: [pull_request, pull_request_target]
+
+jobs:
+    pr-title-linter:
+        name: Lint PR title
+        permissions:
+            pull-requests: read
+        runs-on: ubuntu-latest
+        steps:
+            - name: semantic-pull-request
+              uses: amannn/action-semantic-pull-request@v5
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    pr-labeler:
+        name: Label PR
+        permissions:
+            contents: read
+            pull-requests: write
+        runs-on: ubuntu-latest
+        steps:
+            - name: labeler
+              uses: actions/labeler@v5
+
+    pr-size-labeler:
+        name: Label PR size
+        runs-on: ubuntu-latest
+        steps:
+            - uses: codelytv/pr-size-labeler@v1
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
