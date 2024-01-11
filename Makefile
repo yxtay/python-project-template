@@ -101,10 +101,6 @@ run: run-web  ## run main python app
 dc-build: requirements.txt  ## build app image
 	IMAGE_TAG=$(IMAGE_TAG) docker compose build web_dev web_ci web
 
-.PHONY: dc-push
-dc-push:
-	IMAGE_TAG=$(IMAGE_TAG) docker compose push web_dev web
-
 .PHONY: dc-test
 dc-ci:
 	docker compose run --build --rm web_ci
@@ -116,11 +112,3 @@ dc-up:  ## run app image
 .PHONY: dc-exec
 dc-exec:
 	docker compose exec web_dev /bin/bash
-
-.PHONY: dc-stop
-dc-stop:
-	docker compose stop
-
-.PHONY: dc-down
-dc-down:
-	docker compose down
