@@ -48,7 +48,7 @@ repos:
           - id: fix-encoding-pragma
             args: [--remove]
           - id: name-tests-test
-          #   - id: requirements-txt-fixer  # conflicts with poetry
+          # - id: requirements-txt-fixer # conflicts with poetry
 
           # configs
           - id: check-json
@@ -72,18 +72,6 @@ repos:
       rev: "1.7.0"
       hooks:
           - id: poetry-check
-          #   - id: poetry-lock
-          - id: poetry-export
-            args:
-                [
-                    --format,
-                    requirements.txt,
-                    --output,
-                    requirements.txt,
-                    --without-hashes,
-                ]
-          - id: poetry-install
-            stages: [post-checkout, post-merge]
 
     - repo: https://github.com/astral-sh/ruff-pre-commit
       # Ruff version.

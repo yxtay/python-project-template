@@ -1,4 +1,4 @@
-name: "Pull Request Workflow"
+name: pr
 
 on:
     pull_request:
@@ -7,16 +7,10 @@ on:
             - edited
             - reopened
             - synchronize
-    pull_request_target:
-        types:
-            - opened
-            - edited
-            - reopened
-            - synchronize
 
 jobs:
-    pr-title-linter:
-        name: Lint PR title
+    title-linter:
+        name: lint title
         permissions:
             pull-requests: read
         runs-on: ubuntu-latest
@@ -26,8 +20,8 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    pr-labeler:
-        name: Label PR
+    labeler:
+        name: label
         permissions:
             contents: read
             pull-requests: write
@@ -36,8 +30,8 @@ jobs:
             - name: labeler
               uses: actions/labeler@v5
 
-    pr-size-labeler:
-        name: Label PR size
+    size-labeler:
+        name: label size
         runs-on: ubuntu-latest
         steps:
             - uses: codelytv/pr-size-labeler@v1
